@@ -1,0 +1,26 @@
+{
+    "name": "datapackage-view"
+  , "version": "0.1.0"
+  , "author": "Open Knowledge Labs <labs@okfn.org>"
+  , "repository": {
+    "type": "git",
+    "url": "https://github.com/okfn/datapackage-view-js"
+  }
+  , "license": "MIT"
+  , "dependencies": {
+      "nunjucks": "",
+      "marked": "",
+      "commander": "",
+      "datapackage-read": ">=0.2.2"
+  }
+  , "devDependencies": {
+    "mocha": ""
+  }
+  , "bin": {
+    "dpview": "./cli.js"
+  }
+  , "engines": {
+    "node": "0.10.x",
+    "npm": "2.x.x"
+  }
+}
