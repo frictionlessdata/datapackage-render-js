@@ -24,6 +24,7 @@ var dpView = require('datapackage-view');
 dpView.html('path-to-datapackage', function(error, html) {
   console.log(html);
 });
+```
 
 ## Command Line
 
