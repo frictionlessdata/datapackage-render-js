@@ -12,3 +12,30 @@ describe('html', function() {
   });
 });
 
+describe('resourceStream', function() {
+  it('works ok', function(done) {
+    var resource = {
+      "path": "test/data/dp1/data.csv"
+    }
+    datastream = spec.resourceStream(resource);
+    var output = [];
+    datastream.on('readable', function() {
+      while(row = datastream.read()) {
+        output.push(row);
+      }
+    });
+    datastream.on('finish', function() {
+      assert.equal(output.length, 3);
+      assert.equal(output[0].size, "100");
+      done();
+    });
+
+//    spec.resourceStream(resource, function(error, datastream) {
+//      assert(!error);
+//      assert.equal(datastream.length, 3);
+//      assert.equal(datastream[0].size, "100");
+//      done();
+//    });
+  });
+});
+
