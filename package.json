@@ -1,10 +1,10 @@
 {
-    "name": "datapackage-view"
-  , "version": "0.1.0"
+    "name": "datapackage-render"
+  , "version": "0.2.0"
   , "author": "Open Knowledge Labs <labs@okfn.org>"
   , "repository": {
     "type": "git",
-    "url": "https://github.com/okfn/datapackage-view-js"
+    "url": "https://github.com/okfn/datapackage-render-js"
   }
   , "license": "MIT"
   , "dependencies": {
@@ -17,7 +17,7 @@
     "mocha": ""
   }
   , "bin": {
-    "dpview": "./cli.js"
+    "dprender": "./cli.js"
   }
   , "engines": {
     "node": "0.10.x",

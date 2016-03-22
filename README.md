@@ -1,17 +1,26 @@
-Render and view data packages (especially in the browser)
+Render data packages and their views to various formats including HTML in both
+Node and the browser.
 
 ## Install
 
-[![NPM](https://nodei.co/npm/datapackage-view.png)](https://nodei.co/npm/datapackage-view/)
+[![NPM](https://nodei.co/npm/datapackage-render.png)](https://nodei.co/npm/datapackage-render/)
 
 ```
-npm install datapackage-view
+npm install datapackage-render
 ```
 
 Install with comamnd line tool:
 
 ```
-npm install -g datapackage-view
+npm install -g datapackage-render
+```
+
+If you want PNG rendering you will need to install node-canvas which in turn
+requires additional dependencies outside of node such as Cairo (see
+https://github.com/Automattic/node-canvas#installation):
+
+```
+npm install node-canvas
 ```
 
 # Usage
@@ -19,9 +28,9 @@ npm install -g datapackage-view
 ## Library
 
 ```
-var dpView = require('datapackage-view');
+var render = require('datapackage-render');
 
-dpView.html('path-to-datapackage', function(error, html) {
+render.html('path-to-datapackage', function(error, html) {
   console.log(html);
 });
 ```
@@ -29,6 +38,6 @@ dpView.html('path-to-datapackage', function(error, html) {
 ## Command Line
 
 ```
-dpview html <path>
+dprender html <path-to-data-package>
 ```
 
