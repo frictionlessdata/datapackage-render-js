@@ -29,37 +29,6 @@ var dp1 = {
   ]
 };
 
-dp2 = {
-  "name": "abc",
-  "resources": [
-    {
-      "name": "random",
-      "format": "json",
-      "data": [
-        {"a": "A","b": 28}, {"a": "B","b": 55}, {"a": "C","b": 43},
-        {"a": "D","b": 91}, {"a": "E","b": 81}, {"a": "F","b": 53},
-        {"a": "G","b": 19}, {"a": "H","b": 87}, {"a": "I","b": 52}
-      ]
-    }
-  ],
-  "views": [
-    {
-      "data": [
-        {
-          "resource": "random"
-        }
-      ],
-      "spec": {
-        "mark": "bar",
-        "encoding": {
-          "x": {"field": "a", "type": "ordinal"},
-          "y": {"field": "b", "type": "quantitative"}
-        }
-      }
-    }
-  ]
-};
-
 describe('html', function() {
   it('html renders ok', function(done) {
     spec.html('test/data/dp1', function(error, html) {
@@ -70,52 +39,78 @@ describe('html', function() {
   });
 });
 
-describe('resourceStream', function() {
+describe('renderView', function() {
+  it('works ok', function(done) {
+    var dp = new spec.DataPackage(dp1);
+    var viewId = 0;
+    spec.renderView(dp, viewId)
+      .then(function(vegaView) {
+        vegaView.renderer('canvas').update();
+        var stream = vegaView.canvas().createPNGStream();
+        var output = [];
+        stream.on('data', function(chunk) {
+          output.push(chunk);
+        });
+        stream.on('end', function() {
+          assert.equal(output[0][0], 137);
+          done();
+        });
+      });
+  });
+});
+
+describe('DataPackage', function() {
+  it('instantiates', function() {
+    var dp = new spec.DataPackage();
+  });
+
+  it('instantiates with string', function() {
+    var dp = new spec.DataPackage('abc');
+    assert.equal(dp.path, 'abc');
+  });
+  
+  it('instantiates with object', function() {
+    var dp = new spec.DataPackage(dp1);
+    assert.deepEqual(dp.data, dp1);
+  });
+
+  it('loads', function(done) {
+    var dp = new spec.DataPackage('test/data/dp1');
+    dp.load()
+      .then(function() {
+        assert.equal(dp.data.name, 'abc');
+        assert.equal(dp.resources.length, 1);
+        done();
+      });
+  });
+});
+
+describe('Resource', function() {
   var resource = {
     "path": "test/data/dp1/data.csv"
   }
-  it('works ok', function(done) {
-    spec.resourceStream(resource, function(error, output) {
-      assert(!error);
-      assert.equal(output.length, 3);
-      assert.equal(output[0].size, "100");
-      done();
-    });
+  it('instantiates', function() {
+    var res = new spec.Resource(resource);
+    assert.equal(res.data, resource);
+    assert.equal(res.base, '');
   });
-  it('works with stream', function(done) {
-    var stream = spec.resourceStream(resource);
-    spec.objectStreamToArray(stream, function(error, output) { 
-      assert(!error);
-      assert.equal(output.length, 3);
-      assert.equal(output[0].size, "100");
-      done();
-    });
-  });
-});
-
-describe('misc', function() {
-  it('getVegaDataFromViewDataSpec works ok', function(done) {
-    spec.getVegaDataFromViewDataSpec(dp1, 0, function(err, data) {
-      assert.equal(data[0].values[0].name, 'gb');
-      done();
-    }); 
-  });
-});
-
-describe('renderView', function() {
-  it('works ok', function(done) {
-    spec.renderView(dp1, 0, function(error, vegaView) {
-      vegaView.renderer('canvas').update();
-      var stream = vegaView.canvas().createPNGStream();
-      var output = [];
-      stream.on('data', function(chunk) {
-        output.push(chunk);
-      });
-      stream.on('end', function() {
-        assert.equal(output[0][0], 137);
+  it('objects works', function(done) {
+    var res = new spec.Resource(resource);
+    res.objects()
+      .then(function(output) {
+        assert.equal(output.length, 3);
+        assert.equal(output[0].size, "100");
         done();
       });
-    });
+  });
+  it('stream works', function(done) {
+    var res = new spec.Resource(resource);
+    spec.objectStreamToArray(res.stream()).
+      then(function(output) { 
+        assert.equal(output.length, 3);
+        assert.equal(output[0].size, "100");
+        done();
+      });
   });
 });
 

@@ -1,25 +1,26 @@
 {
-    "name": "datapackage-render"
-  , "version": "0.2.0"
-  , "author": "Open Knowledge Labs <labs@okfn.org>"
-  , "repository": {
+  "name": "datapackage-render",
+  "version": "0.2.0",
+  "author": "Open Knowledge Labs <labs@okfn.org>",
+  "repository": {
     "type": "git",
     "url": "https://github.com/okfn/datapackage-render-js"
-  }
-  , "license": "MIT"
-  , "dependencies": {
-      "nunjucks": "",
-      "marked": "",
-      "commander": "",
-      "datapackage-read": ">=0.2.2"
-  }
-  , "devDependencies": {
+  },
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.3.4",
+    "commander": "",
+    "datapackage-read": ">=0.2.2",
+    "marked": "",
+    "nunjucks": ""
+  },
+  "devDependencies": {
     "mocha": ""
-  }
-  , "bin": {
+  },
+  "bin": {
     "dprender": "./cli.js"
-  }
-  , "engines": {
+  },
+  "engines": {
     "node": "0.10.x",
     "npm": "2.x.x"
   }

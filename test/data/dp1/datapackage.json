@@ -1,3 +1,8 @@
 {
-  "name": "abc"
+  "name": "abc",
+  "resources": [
+    {
+      "path": "data.csv"
+    }
+  ]
 }
