@@ -8,9 +8,10 @@ program
   .action(function(cmd, path){
     // console.log(cmd, path);
     if (cmd == 'html') {
-      lib.html(path, function(error, html) {
-        console.log(html);
-      });
+      lib.html(path)
+        .then(function(html) {
+          console.log(html);
+        });
     }
     if (cmd == 'view') {
       var dp = new lib.DataPackage(path);

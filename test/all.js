@@ -29,13 +29,14 @@ var dp1 = {
   ]
 };
 
+// TODO: test errors
 describe('html', function() {
   it('html renders ok', function(done) {
-    spec.html('test/data/dp1', function(error, html) {
-      assert(!error);
-      assert.equal(html.slice(0, 20), '<div class="dataset ');
-      done();
-    });
+    spec.html('test/data/dp1')
+      .then(function(html) {
+        assert.equal(html.slice(0, 20), '<div class="dataset ');
+        done();
+      });
   });
 });
 

@@ -7,30 +7,23 @@ var fs = require('fs')
   , datapackage = require('./datapackage.js')
   ;
 
-// Promise.promisify(dpRead.load);
 
+// TODO: pass in a loaded dp object - dp loading should not happen here
 exports.html = function(path, callback) {
   nunjucks.configure('views', { autoescape: true });
 
-  dpRead.load(path, function(err, dpkg) {
-    if (err) {
-      callback(err)
-      return;
-    }
-
-    dpkg.resources.forEach(function(resource, idx) {
-      // set special local url for use in javascript
-      resource.localurl = '/tools/dataproxy/?url=' + encodeURIComponent(resource.url);
+  var dp = new datapackage.DataPackage(path);
+  var p = dp.load();
+  return p.then(function() {
+      // Set local view JS so it all works (e.g. inline relevant data etc)
+      var dataViews = dp.data.views || [];
+      var res = nunjucks.render('html.html', {
+        dataset: dp.data,
+        jsonDataPackage: JSON.stringify(dp.data),
+        dataViews: JSON.stringify(dataViews),
+      });
+      return res;
     });
-    var dataViews = dpkg.views || [];
-
-    var res = nunjucks.render('html.html', {
-      dataset: dpkg,
-      jsonDataPackage: JSON.stringify(dpkg),
-      dataViews: JSON.stringify(dataViews),
-    });
-    callback(null, res);
-  });
 };
 
 // Render a Data Package view to a Vega view component
