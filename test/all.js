@@ -13,16 +13,15 @@ var dp1 = {
   ],
   "views": [
     {
-      "data": [
-        {
-          "resource": "random"
-        }
-      ],
+      "type": "vegalite",
       "spec": {
+        "data": {
+          "resource": "random"
+        },
         "mark": "bar",
         "encoding": {
-          "x": {"field": "a", "type": "ordinal"},
-          "y": {"field": "b", "type": "quantitative"}
+          "x": {"field": "name", "type": "ordinal"},
+          "y": {"field": "size", "type": "quantitative"}
         }
       }
     }
@@ -52,7 +51,8 @@ describe('renderView', function() {
           output.push(chunk);
         });
         stream.on('end', function() {
-          assert.equal(output[0][0], 137);
+          // very hacky test ...
+          assert.equal(output[output.length-1][0], 174);
           done();
         });
       });
@@ -80,9 +80,11 @@ describe('DataPackage', function() {
       .then(function() {
         assert.equal(dp.data.name, 'abc');
         assert.equal(dp.resources.length, 1);
+        assert.equal(dp.resources[0].fullPath(), 'test/data/dp1/data.csv');
         done();
       });
   });
+
 });
 
 describe('Resource', function() {
@@ -93,6 +95,11 @@ describe('Resource', function() {
     var res = new spec.Resource(resource);
     assert.equal(res.data, resource);
     assert.equal(res.base, '');
+  });
+  it('fullPath works', function() {
+    var res = new spec.Resource(resource, 'abc');
+    assert.equal(res.base, 'abc');
+    assert.equal(res.fullPath(), 'abc/test/data/dp1/data.csv');
   });
   it('objects works', function(done) {
     var res = new spec.Resource(resource);

@@ -1,11 +1,12 @@
-var nunjucks = require('nunjucks')
-  , dpRead = require('datapackage-read')
+var fs = require('fs')
+  , path = require('path')
+  , nunjucks = require('nunjucks')
   , parse = require('csv-parse')
   , transform = require('stream-transform')
-  , fs = require('fs')
   , vl = require("vega-lite")
   , vg = require("vega")
-  , Promise = require('bluebird');
+  , Promise = require('bluebird')
+  , dpRead = require('datapackage-read')
   ;
 
 // Promise.promisify(dpRead.load);
@@ -54,29 +55,33 @@ exports.objectStreamToArray = function(stream, callback) {
 }
 
 // Render a Data Package view to a Vega view component
-exports.renderView = function(datapackage, viewId, callback) {
+
+//
+// The github issue, in particular, explains how you have to do this ...
+exports.renderView = function(datapackage, viewId) {
   var view = datapackage.data.views[viewId]
     , vgSpec = vl.compile(view.spec).spec
-    , viewDataSpec = datapackage.data.views[viewId].data[0]
+    // TODO: support for multiple data resource sources
+    // NB: vega-lite only supports one data source
+    // ATM we just take first data item
+    , viewDataSpec = datapackage.data.views[viewId].spec.data
     , resource = datapackage.getResource(viewDataSpec.resource)
     ;
   var p = new Promise(function(resolve, reject) {
     // get the resource data and inject it into the vega view and return that view
     resource.objects()
       .then(function(data) {
-        var out = [
-          {
-            "name": viewDataSpec.resource,
-            "values": data
-          }
-        ];
-        vg.parse.spec(vgSpec, {data: out}, function(error, chart) {
-          var vegaView = chart();
+        vg.parse.spec(vgSpec, function(error, chart) {
           if (error) {
             reject(error);
-          } else {
-            resolve(vegaView);
+            return;
           }
+          var vegaView = chart();
+          // late-bind the data
+          // vega-lite compiles to vega where the dataset is always called 'source'
+          vegaView.data('source').insert(data);
+          vegaView.update();
+          resolve(vegaView);
         });
       })
       .catch(function(e) {
@@ -176,13 +181,18 @@ exports.Resource = function(resourceObject, base) {
   this.data = resourceObject;
 }
 
+// TODO: support urls vs just paths ...
+exports.Resource.prototype.fullPath = function() {
+  return path.join(this.base, this.data.path);
+}
+
 // give me a raw (binary) resource stream
 // TODO: use the base path when locating the data ...
 exports.Resource.prototype.rawStream = function() {
   if (this.data.url) {
     return request(this.data.url);
   } else if (this.data.path) {
-    return fs.createReadStream(this.data.path);
+    return fs.createReadStream(this.fullPath());
   } else if (resource.data) {
     // TODO: what happens if it is already JSON objects ...?
     return _streamFromString(this.data.data);

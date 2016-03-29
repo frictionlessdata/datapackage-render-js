@@ -12,6 +12,22 @@ program
         console.log(html);
       });
     }
+    if (cmd == 'view') {
+      var dp = new lib.DataPackage(path);
+      dp.load()
+        .then(function() {
+          lib.renderView(dp, 0)
+            .then(function(vegaView) {
+              vegaView.renderer('canvas').update();
+              vegaView.canvasAsync(function(canvas) {
+                var stream = canvas.createPNGStream();
+                // var out = file ? fs.createWriteStream(file) : process.stdout;
+                var out = process.stdout;
+                stream.pipe(out);
+              });
+            });
+        });
+    }
   });
   ;
 
