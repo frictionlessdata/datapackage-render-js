@@ -36,23 +36,33 @@ render.html('path-to-datapackage', function(error, html) {
   console.log(html);
 });
 
+// Render a "view"
+
+// At the moment we only support vega-lite views (vega coming soon)
+
+// Integration with Data Package is via a resource property on vega-lite data
+// property. At runtime the Data Package resource data is injected into the
+// vega vis. (Proper documentation coming soon)
+
+// for a good example usage see dprender function in cli.js
+
 var dp = new DataPackage('path-to-datapackage');
 var viewIndex = 0;
 render.renderView(dp, viewIndex)
   .then(function(vegaView) {
     // do something with vegaView object ...
   });
-
-// for a good example usage see dprender function in cli.js
 ```
 
 ## Command Line
 
 ```
+// will write html output to stdout
 dprender html <path-to-data-package>
+
+// will write png output to stdout
 dprender view <path-to-data-package>
 ```
-
 
 ## Research
 
