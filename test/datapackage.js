@@ -8,7 +8,19 @@ var dp1 = {
     {
       "name": "random",
       "format": "csv",
-      "path": "test/data/dp1/data.csv"
+      "path": "test/data/dp1/data.csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "size",
+            "type": "integer"
+          }
+        ]
+      }
     }
   ],
   "views": [
@@ -84,7 +96,29 @@ describe('Resource', function() {
     spec.objectStreamToArray(res.stream()).
       then(function(output) { 
         assert.equal(output.length, 3);
-        assert.equal(output[0].size, "100");
+        assert.strictEqual(output[0].size, "100");
+        done();
+      });
+  });
+  it('stream works with jts', function(done) {
+    var res = new spec.Resource(dp1.resources[0]);
+    spec.objectStreamToArray(res.stream()).
+      then(function(output) { 
+        assert.equal(output.length, 3);
+        assert.strictEqual(output[0].size, 100);
+        done();
+      });
+  });
+});
+
+describe('csvToStream', function() {
+  it('casting works', function(done) {
+    var dp = new spec.DataPackage(dp1);
+    var stream = spec.csvToStream(dp.resources[0].rawStream(), dp.resources[0].data.schema);
+    spec.objectStreamToArray(stream).
+      then(function(output) { 
+        assert.equal(output.length, 3);
+        assert.strictEqual(output[0].size, 100);
         done();
       });
   });

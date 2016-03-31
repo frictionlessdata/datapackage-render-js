@@ -119,24 +119,13 @@ function _streamFromString(string) {
 
 // for tabular data this is a stream of the row objects
 // TODO: for geo probably something a bit different
-// TODO: cast data using the schema
 exports.Resource.prototype.stream = function() {
-  var parser = parse({delimiter: ','});
-
   if (this.data.format && this.data.format != 'csv') {
     throw Exception('We can only handle CSV data at the moment');
   }
 
-  // TODO: use any csv dialect description info in the data package to parse
-  // var parser = parse({columns: true, trim: true}, callback);
-  var parser = parse({columns: true, trim: true});
-  var transformer = transform(function(data) {
-    return data;
-  });
-
   var stream = this.rawStream();
-  var outstream = stream.pipe(parser).pipe(transformer);
-  return outstream;
+  return exports.csvToStream(this.rawStream(), this.data.schema);
 }
 
 // get resource data as array of objects
@@ -145,6 +134,42 @@ exports.Resource.prototype.objects = function() {
   return exports.objectStreamToArray(stream);
 }
 
+// given a raw file stream for a CSV return an object stream
+// use JSON Table Schema to do type casting if provided
+// use csv description format if provided
+//
+// TODO: error handling e.g. if a type casts badly ...
+exports.csvToStream = function(csvStream, jsonTableSchema) {
+  // TODO: CSV DDF usage ...
+  var parser = parse({columns: true, trim: true});
+  
+  var castMap = {};
+  var typeToCast = {
+    'integer': parseInt,
+    'number': parseFloat,
+    // TODO: security question - can we pass string to date that will blow it up in some way?
+    'date': Date,
+    'datetime': Date
+  };
+  if (jsonTableSchema && jsonTableSchema.fields) {
+    jsonTableSchema.fields.forEach(function(field) {
+      if (field.type in typeToCast) {
+        castMap[field.name] = typeToCast[field.type];
+      }
+    });
+  }
+  var transformer = transform(function(data) {
+    for (key in data) {
+      if (key in castMap) {
+        data[key] = castMap[key](data[key]);
+      }
+    }
+    return data;
+  });
+
+  var outstream = csvStream.pipe(parser).pipe(transformer);
+  return outstream;
+}
 
 // ========================================================
 // Misc Functions
