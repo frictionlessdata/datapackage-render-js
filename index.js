@@ -29,26 +29,40 @@ exports.html = function(path, callback) {
 // Render a Data Package view to a Vega view component
 exports.renderView = function(datapackage, viewId) {
   var view = datapackage.data.views[viewId]
-    , vgSpec = vl.compile(view.spec).spec
-    // TODO: support for multiple data resource sources
-    // NB: vega-lite only supports one data source
-    // ATM we just take first data item
-    , viewDataSpec = datapackage.data.views[viewId].spec.data
-    , resource = datapackage.getResource(viewDataSpec.resource)
+    , vegaSpec = null
     ;
+  if (view.type == 'vegalite') {
+    var vegaSpec = vl.compile(view.spec).spec
+      // NB: vega-lite only supports one data source
+      // ATM we just take first data item
+      , viewDataSpec = datapackage.data.views[viewId].spec.data
+      , resource = datapackage.getResource(viewDataSpec.resource)
+      ;
+  } else if (view.type == 'vega') {
+    // TODO: support for multiple data resource sources
+    var vegaSpec = view.spec
+      , viewDataSpec = datapackage.data.views[viewId].spec.data[0]
+      , resource = datapackage.getResource(viewDataSpec.resource)
+      ;
+  }
   var p = new Promise(function(resolve, reject) {
     // get the resource data and inject it into the vega view and return that view
     resource.objects()
       .then(function(data) {
-        vg.parse.spec(vgSpec, function(error, chart) {
+        vg.parse.spec(vegaSpec, function(error, chart) {
           if (error) {
             reject(error);
             return;
           }
           var vegaView = chart();
+
           // late-bind the data
-          // vega-lite compiles to vega where the dataset is always called 'source'
-          vegaView.data('source').insert(data);
+          if (view.type == 'vegalite') {
+            // vega-lite compiles to vega where the dataset is always called 'source'
+            vegaView.data('source').insert(data);
+          } else if (view.type == 'vega') {
+            vegaView.data(viewDataSpec.name).insert(data);
+          }
           vegaView.update();
           resolve(vegaView);
         });
