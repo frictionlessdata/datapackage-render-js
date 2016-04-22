@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 var lib = require('./index.js')
+  , datapackage = require('./datapackage.js')
   , program = require('commander');
   ;
 
@@ -14,7 +15,7 @@ program
         });
     }
     if (cmd == 'view') {
-      var dp = new lib.DataPackage(path);
+      var dp = new datapackage.DataPackage(path);
       dp.load()
         .then(function() {
           lib.renderView(dp, 0)
