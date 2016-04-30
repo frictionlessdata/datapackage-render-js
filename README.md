@@ -20,7 +20,7 @@ requires additional dependencies outside of node such as Cairo (see
 https://github.com/Automattic/node-canvas#installation):
 
 ```
-npm install node-canvas
+npm install canvas
 ```
 
 # Usage
