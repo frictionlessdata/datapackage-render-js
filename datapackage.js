@@ -139,10 +139,16 @@ exports.Resource.prototype.objects = function() {
 // use csv description format if provided
 //
 // TODO: error handling e.g. if a type casts badly ...
-exports.csvToStream = function(csvStream, jsonTableSchema) {
-  // TODO: CSV DDF usage ...
-  var parser = parse({columns: true, trim: true});
-  
+exports.csvToStream = function(csvStream, jsonTableSchema, csvDialect) {
+  // TODO: CSV DDF usage ...i
+  var parseOptions = {
+    columns: true,
+    trim: true
+  }
+  if (csvDialect){
+    parseOptions.delimiter = csvDialect.delimiter
+  }
+  var parser = parse(parseOptions);
   var castMap = {};
   var typeToCast = {
     'integer': parseInt,
