@@ -1,6 +1,7 @@
 var assert = require('assert')
   , spec = require('../datapackage.js')
   , stream = require('stream')
+  , fs = require('fs')
   ;
 
 var dp1 = {
@@ -131,12 +132,12 @@ describe('csvToStream', function() {
       });
   });
   it('works with csv dialect', function(done) {
-    var tsv = 'name\tsize\nus\t100\ngb\t200';
+    var content = fs.createReadStream('test/data/csv-dialects/data.csv')
     var dp = new spec.DataPackage(dp1);
-    var stream = spec.csvToStream(makeStream(tsv), dp.resources[0].data.schema, {delimiter: '\t'});
+    var stream = spec.csvToStream(content, dp.resources[0].data.schema, {delimiter: '\t', quoteChar: '"'});
     spec.objectStreamToArray(stream).
-      then(function(output) { 
-        assert.equal(output.length, 2);
+      then(function(output) {
+        assert.equal(output.length, 3);
         assert.strictEqual(output[0].size, 100);
         done();
       });
