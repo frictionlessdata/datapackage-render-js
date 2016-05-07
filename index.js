@@ -27,22 +27,22 @@ exports.html = function(path, callback) {
 };
 
 // Render a Data Package view to a Vega view component
-exports.renderView = function(datapackage, viewId) {
-  var view = datapackage.data.views[viewId]
+exports.renderView = function(ourDataPackage, viewId) {
+  var view = ourDataPackage.data.views[viewId]
     , vegaSpec = null
     ;
   if (view.type == 'vegalite') {
     var vegaSpec = vl.compile(view.spec).spec
       // NB: vega-lite only supports one data source
       // ATM we just take first data item
-      , viewDataSpec = datapackage.data.views[viewId].spec.data
-      , resource = datapackage.getResource(viewDataSpec.resource)
+      , viewDataSpec = ourDataPackage.data.views[viewId].spec.data
+      , resource = ourDataPackage.getResource(viewDataSpec.resource)
       ;
   } else if (view.type == 'vega') {
     // TODO: support for multiple data resource sources
     var vegaSpec = view.spec
-      , viewDataSpec = datapackage.data.views[viewId].spec.data[0]
-      , resource = datapackage.getResource(viewDataSpec.resource)
+      , viewDataSpec = ourDataPackage.data.views[viewId].spec.data[0]
+      , resource = ourDataPackage.getResource(viewDataSpec.resource)
       ;
   }
   var p = new Promise(function(resolve, reject) {
@@ -73,6 +73,37 @@ exports.renderView = function(datapackage, viewId) {
   });
   return p;
 }
+
+exports.renderViewToHtml = function(ourDataPackage, viewId) {
+  // TODO: get rid of the repetition between here and renderView
+  var view = ourDataPackage.data.views[viewId]
+    , vegaSpec = null
+    ;
+  if (view.type == 'vegalite') {
+    var vegaSpec = vl.compile(view.spec).spec
+      // NB: vega-lite only supports one data source
+      // ATM we just take first data item
+      , viewDataSpec = ourDataPackage.data.views[viewId].spec.data
+      , resource = ourDataPackage.getResource(viewDataSpec.resource)
+      ;
+  } else if (view.type == 'vega') {
+    // TODO: support for multiple data resource sources
+    var vegaSpec = view.spec
+      , viewDataSpec = ourDataPackage.data.views[viewId].spec.data[0]
+      , resource = ourDataPackage.getResource(viewDataSpec.resource)
+      ;
+  }
+
+  nunjucks.configure('views', { autoescape: true });
+  return resource.objects()
+    .then(function(data) {
+      var res = nunjucks.render('vega.html', {
+        vegaViewData: JSON.stringify(data, null, 2),
+        vegaSpec: JSON.stringify(vegaSpec, null, 2)
+      });
+      return res;
+    });
+};
 
 function writeToPng(vegaView, file, callback) {
   vegaView.canvasAsync(function(canvas) {

@@ -30,6 +30,17 @@ program
             });
         });
     }
+    if (cmd == 'viewhtml') {
+      var dp = new datapackage.DataPackage(path);
+      dp.load()
+        .then(function() {
+          lib.renderViewToHtml(dp, 0)
+            .then(function(html) {
+              var out = process.stdout;
+              out.write(html);
+            });
+          });
+    }
   });
   ;
 
