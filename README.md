@@ -48,20 +48,39 @@ render.html('path-to-datapackage', function(error, html) {
 
 var dp = new DataPackage('path-to-datapackage');
 var viewIndex = 0;
+
+// if you need to load dp
+// dp.load().then(...)
+
 render.renderView(dp, viewIndex)
   .then(function(vegaView) {
     // do something with vegaView object ...
+  });
+
+
+render.renderViewToHtml(dp, viewIndex)
+  .then(function(html) {
+    // do something ...
   });
 ```
 
 ## Command Line
 
 ```
-// will write html output to stdout
+// will write html rendering of package metadata to stdout
 dprender html <path-to-data-package>
 
 // will write png output to stdout
 dprender view <path-to-data-package>
+
+// e.g.
+dprender view test/data/dp-vega > tmp.png
+
+// render a view to HTML (using vega)
+dprender viewhtml <path-to-data-package>
+
+// e.g.
+dprender viewhtml test/data/dp-vega > tmp.html
 ```
 
 ## Research

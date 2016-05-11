@@ -117,6 +117,7 @@ describe('renderView', function() {
         });
         stream.on('end', function() {
           // very hacky test ...
+          // how do we test png output better ...
           assert.equal(output[output.length-1][0], 174);
           done();
         });
@@ -139,6 +140,19 @@ describe('renderView', function() {
           assert.equal(output[output.length-1][0], 174);
           done();
         });
+      });
+  });
+});
+
+describe('view to HTML', function() {
+  it('works', function(done) {
+    var dp = new datapackage.DataPackage(dp1);
+    var viewId = 0;
+    spec.renderViewToHtml(dp, viewId)
+      .then(function(html) {
+        assert.equal(html.slice(0, 5), '<scri');
+        assert.equal(html.slice(332, 373), 'var vegaViewData = [\n  {\n    \"name\": \"gb\"');
+        done();
       });
   });
 });

@@ -1,0 +1,23 @@
+<script src="http://vega.github.io/vega-editor/vendor/d3.min.js" charset="utf-8"></script>
+<script src="http://vega.github.io/vega-editor/vendor/vega.js" charset="utf-8"></script>
+<script src="http://vega.github.io/vega-editor/vendor/vega-embed.js" charset="utf-8"></script>
+
+<div id="vis"></div>
+
+<script type="text/javascript">
+  var vegaViewData = {{ vegaViewData | safe }};
+  var vegaSpec = {{ vegaSpec | safe }};
+
+  vg.parse.spec(vegaSpec, function(error, chart) {
+    var vis = chart({
+      el:"#vis"
+    });
+
+    vis.data(vegaSpec.data[0].name)
+      .remove(() => true)
+      .insert(vegaViewData)
+      ;
+    vis.update();
+  });
+</script>
+
