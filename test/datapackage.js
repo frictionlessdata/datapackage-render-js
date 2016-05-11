@@ -134,7 +134,7 @@ describe('csvToStream', function() {
   it('works with csv dialect', function(done) {
     var content = fs.createReadStream('test/data/csv-dialects/data.csv')
     var dp = new spec.DataPackage(dp1);
-    var stream = spec.csvToStream(content, dp.resources[0].data.schema, {delimiter: '\t', quoteChar: '"'});
+    var stream = spec.csvToStream(content, dp.resources[0].data.schema, {delimiter: '\t', quoteChar: '"', escapeChar: '\''});
     spec.objectStreamToArray(stream).
       then(function(output) {
         assert.equal(output.length, 3);
