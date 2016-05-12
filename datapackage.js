@@ -147,8 +147,9 @@ exports.csvToStream = function(csvStream, jsonTableSchema, csvDialect) {
   }
   if (csvDialect){
     parseOptions.delimiter = csvDialect.delimiter || ','
+    parseOptions.rowDelimiter = csvDialect.lineTerminator
     parseOptions.quote = csvDialect.quoteChar || '"'
-    parseOptions.escape = csvDialect.escape || '"'
+    parseOptions.escape = csvDialect.escapeChar || '"'
   }
   var parser = parse(parseOptions);
   var castMap = {};
