@@ -140,16 +140,17 @@ exports.Resource.prototype.objects = function() {
 //
 // TODO: error handling e.g. if a type casts badly ...
 exports.csvToStream = function(csvStream, jsonTableSchema, csvDialect) {
-  // TODO: CSV DDF usage ...i
   var parseOptions = {
     columns: true,
-    trim: true
+    ltrim: true
   }
   if (csvDialect){
     parseOptions.delimiter = csvDialect.delimiter || ','
     parseOptions.rowDelimiter = csvDialect.lineTerminator
     parseOptions.quote = csvDialect.quoteChar || '"'
-    parseOptions.escape = csvDialect.escapeChar || '"'
+    if (csvDialect.doubleQuote != undefined && csvDialect.doubleQuote == false){
+	parseOptions.escape = ''
+    }
   }
   var parser = parse(parseOptions);
   var castMap = {};
