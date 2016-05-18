@@ -131,14 +131,49 @@ describe('csvToStream', function() {
         done();
       });
   });
-  it('works with csv dialect', function(done) {
-    var content = fs.createReadStream('test/data/csv-dialects/data.csv')
+  it('works with delimiter', function(done) {
+    var content = fs.createReadStream('test/data/csv-dialects/data-del.csv')
     var dp = new spec.DataPackage(dp1);
-    var stream = spec.csvToStream(content, dp.resources[0].data.schema, {delimiter: '\t', quoteChar: '"'});
+    var stream = spec.csvToStream(content, dp.resources[0].data.schema, {delimiter: '\t'});
+    spec.objectStreamToArray(stream).
+      then(function(output) {
+        assert.equal(output.length, 3);
+        assert.strictEqual(output[2].info, "test,for,delimiter");
+        done();
+      });
+  });
+  it('works with quoteChar', function(done) {
+    var content = fs.createReadStream('test/data/csv-dialects/data-qc.csv')
+    var dp = new spec.DataPackage(dp1);
+    var stream = spec.csvToStream(content, dp.resources[0].data.schema, {quoteChar: "'"});
+    spec.objectStreamToArray(stream).
+      then(function(output) {
+        assert.equal(output.length, 3);
+        assert.strictEqual(output[1].info,'U,S,A');
+        done();
+      });
+  });
+  it('works with doubleQuote', function(done) {
+    var content = fs.createReadStream('test/data/csv-dialects/data-dq.csv')
+    var dp = new spec.DataPackage(dp1);
+    var stream = spec.csvToStream(content, dp.resources[0].data.schema, {doubleQuote: '"'});
+    spec.objectStreamToArray(stream).
+      then(function(output) {
+        assert.equal(output.length, 3);
+        assert.strictEqual(output[2].info, 'no "info for this"');
+        done();
+      });
+  });
+  it('works with all csv dialects', function(done) {
+    var content = fs.createReadStream('test/data/csv-dialects/data-all.csv')
+    var dp = new spec.DataPackage(dp1);
+    var stream = spec.csvToStream(content, dp.resources[0].data.schema, {delimiter: '\t', quoteChar: "'", doubleQuote: '"'});
     spec.objectStreamToArray(stream).
       then(function(output) {
         assert.equal(output.length, 3);
         assert.strictEqual(output[0].size, 100);
+        assert.strictEqual(output[1].info, 'U	S	A');
+        assert.strictEqual(output[2].info, '"no info"');
         done();
       });
   });
