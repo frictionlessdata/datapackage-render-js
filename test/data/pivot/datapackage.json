@@ -1,0 +1,90 @@
+{
+  "name": "abc",
+  "resources": [
+    {
+      "name": "random",
+      "format": "csv",
+      "path": "data.csv",
+      "schema": {
+        "fields": [
+          {
+            "name": "country",
+            "type": "string"
+          },
+          {
+            "name": "date",
+            "type": "date"
+          },
+          {
+            "name": "price",
+            "type": "number"
+          }
+        ]
+      }
+    }
+  ],
+  "views": [
+    {
+      "type": "vega",
+      "spec": {
+        "data": [
+          {
+            "name": "blah",
+            "resource": "random"
+          }
+        ],
+            "width": 600,
+            "height": 200,
+            "background": "#FFFFFF",
+            "padding": {"top": 10, "left": 30, "bottom": 30, "right": 10},
+            "scales": [
+        {
+          "name": "x",
+          "type": "time",
+          "range": "width",
+          "domain": {"data": "blah", "field": "date"}
+        },
+        {
+          "name": "y",
+          "type": "linear",
+          "range": "height",
+          "nice": true,
+          "domain": {"data": "blah", "field": "price"}
+        },
+        {
+          "name": "color", 
+          "type": "ordinal", 
+          "domain": {"data": "blah", "field": "country"},
+          "range": "category10"
+        }
+      ],
+      "axes": [
+        {"type":    "x", "scale": "x", "tickSizeEnd": 0},
+        {"type": "y", "scale": "y"}
+      ],
+        "marks": [
+    {
+      "type": "group",
+      "from": {
+        "data": "blah",
+        "transform": [{"type": "facet", "groupby": ["country"]}]
+      },
+      "marks": [
+        {
+          "type": "line",
+          "properties": {
+            "enter": {
+              "x": {"scale": "x", "field": "date"},
+              "y": {"scale": "y", "field": "price"},
+              "stroke": {"scale": "color", "field": "country"},
+              "strokeWidth": {"value": 2}
+            }
+          }
+        }
+       ]
+          }
+        ]
+      }
+    }
+  ]
+}
