@@ -1,0 +1,5 @@
+string,number,integer,boolean,date
+Word,0,0,true,2016-05-21
+,-100.58,5,false,2016-05
+test@mail.com,-1,1000000,false,2016-05-21	14:43:43
+http://www.testwebsite.com,3.14,-1000,false,2016-may-23

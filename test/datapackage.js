@@ -131,6 +131,81 @@ describe('csvToStream', function() {
         done();
       });
   });
+  it('parse works for strings', function(done) {
+    var schema = fs.readFileSync("test/data/types-test/schema.json", "utf8")
+    var jsonContent = JSON.parse(schema)
+    var dp = new spec.DataPackage(jsonContent);
+    var stream = spec.csvToStream(dp.resources[0].rawStream(), dp.resources[0].data.schema);
+    spec.objectStreamToArray(stream).
+      then(function(output) {
+        assert.strictEqual(typeof output[0].string, 'string');
+        assert.strictEqual(output[0].string, 'Word');
+        assert.strictEqual(output[1].string, '');
+        assert.strictEqual(output[2].string, 'test@mail.com');
+        assert.strictEqual(output[3].string, 'http://www.testwebsite.com');
+        done();
+      });
+  });
+  it('parse works for numbers', function(done) {
+    var schema = fs.readFileSync("test/data/types-test/schema.json", "utf8")
+    var jsonContent = JSON.parse(schema)
+    var dp = new spec.DataPackage(jsonContent);
+    var stream = spec.csvToStream(dp.resources[0].rawStream(), dp.resources[0].data.schema);
+    spec.objectStreamToArray(stream).
+      then(function(output) {
+        assert.strictEqual(typeof output[0].number, 'number');
+        assert.strictEqual(output[0].number, 0);
+        assert.strictEqual(output[1].number, -100.58);
+        assert.strictEqual(output[2].number, -1);
+        assert.strictEqual(output[3].number, 3.14);
+        done();
+      });
+  });
+  it('parse works for integers', function(done) {
+    var schema = fs.readFileSync("test/data/types-test/schema.json", "utf8")
+    var jsonContent = JSON.parse(schema)
+    var dp = new spec.DataPackage(jsonContent);
+    var stream = spec.csvToStream(dp.resources[0].rawStream(), dp.resources[0].data.schema);
+    spec.objectStreamToArray(stream).
+      then(function(output) {
+        assert.strictEqual(typeof output[0].integer, 'number');
+        assert.strictEqual(output[0].integer, 0);
+        assert.strictEqual(output[1].integer, 5);
+        assert.strictEqual(output[2].integer, 1000000);
+        assert.strictEqual(output[3].integer, -1000);
+        done();
+      });
+  });
+  it('parse works for booleans', function(done) {
+    var schema = fs.readFileSync("test/data/types-test/schema.json", "utf8")
+    var jsonContent = JSON.parse(schema)
+    var dp = new spec.DataPackage(jsonContent);
+    var stream = spec.csvToStream(dp.resources[0].rawStream(), dp.resources[0].data.schema);
+    spec.objectStreamToArray(stream).
+      then(function(output) {
+        assert.strictEqual(typeof output[0].boolean, 'boolean');
+        assert.strictEqual(output[0].boolean, true);
+        assert.strictEqual(output[1].boolean, false);
+        assert.strictEqual(output[2].boolean, false);
+        assert.strictEqual(output[3].boolean, false);
+        done();
+      });
+  });
+  it('parse works for dates', function(done) {
+    var schema = fs.readFileSync("test/data/types-test/schema.json", "utf8")
+    var jsonContent = JSON.parse(schema)
+    var dp = new spec.DataPackage(jsonContent);
+    var stream = spec.csvToStream(dp.resources[0].rawStream(), dp.resources[0].data.schema);
+    spec.objectStreamToArray(stream).
+      then(function(output) {
+        assert.strictEqual(typeof output[0].date, 'number');
+        assert.strictEqual(output[0].date, 1463788800000);
+        assert.strictEqual(output[1].date, 1462060800000);
+        assert.strictEqual(output[2].date, 1463827423000);
+        assert.strictEqual(output[3].date, 1463947200000);
+        done();
+      });
+  });
   it('works with delimiter', function(done) {
     var content = fs.createReadStream('test/data/csv-dialects/data-del.csv')
     var dp = new spec.DataPackage(dp1);
