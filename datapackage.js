@@ -159,9 +159,9 @@ exports.csvToStream = function(csvStream, jsonTableSchema, csvDialect) {
     return Date.parse(str);
   };
   function parseBoolean(bool) {
-    if (bool === 'true') {
+    if (bool.toLowerCase() === 'true' | bool === '1') {
       return true
-    } else {
+    } else if (bool.toLowerCase() === 'false' | bool === '0'){
       return false
     }
   };
