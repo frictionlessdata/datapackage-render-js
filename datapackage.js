@@ -165,13 +165,18 @@ exports.csvToStream = function(csvStream, jsonTableSchema, csvDialect) {
       return false
     }
   };
+  function parseObject(obj) {
+    return JSON.parse((obj))
+  }
   var typeToCast = {
     'integer': parseInt,
     'number': parseFloat,
     // TODO: security question - can we pass string to date that will blow it up in some way?
     'date': parseDate,
     'datetime': parseDate,
-    'boolean': parseBoolean
+    'boolean': parseBoolean,
+    'object': parseObject,
+    'array': parseObject
   };
   if (jsonTableSchema && jsonTableSchema.fields) {
     jsonTableSchema.fields.forEach(function(field) {
