@@ -241,6 +241,49 @@ describe('csvToStream', function() {
         done();
       });
   });
+  it('parse works for objects', function(done) {
+    var schema = fs.readFileSync("test/data/types-test/schema.json", "utf8")
+    var jsonContent = JSON.parse(schema)
+    var dp = new spec.DataPackage(jsonContent);
+    var stream = spec.csvToStream(dp.resources[0].rawStream(), dp.resources[0].data.schema);
+    spec.objectStreamToArray(stream).
+      then(function(output) {
+        assert.strictEqual(typeof output[0].object, 'object');
+        assert.strictEqual(output[0].object.key, 'value');
+        assert.deepEqual(output[0].object, {key: 'value'});
+        assert.deepEqual(output[1].object.key, {inner_key: 'value'});
+        assert.deepEqual(output[2].object, {});
+        assert.strictEqual(output[3].object.key, 1);
+        assert.strictEqual(output[4].object.key, '');
+        assert.deepEqual(output[5].object, {key: true});
+        assert.deepEqual(output[6].object, {'': ''});
+        assert.deepEqual(output[7].object, {true: 1});
+        assert.deepEqual(output[8].object, {1: 1});       //         ~~~~~
+        assert.deepEqual(output[8].object, {'1': 1});     // should both pass test?
+        assert.deepEqual(output[9].object, {key0: {key1: {key2: {}}}});
+      });
+      done();
+  });
+  it('parse works for arrays', function(done) {
+    var schema = fs.readFileSync("test/data/types-test/schema.json", "utf8")
+    var jsonContent = JSON.parse(schema)
+    var dp = new spec.DataPackage(jsonContent);
+    var stream = spec.csvToStream(dp.resources[0].rawStream(), dp.resources[0].data.schema);
+    spec.objectStreamToArray(stream).
+      then(function(output) {
+        assert.strictEqual(typeof output[0].object, 'object');
+        assert.strictEqual(output[0].array[0], 1);
+        assert.deepEqual(output[0].array, [1,2,3,4,5]);
+        assert.deepEqual(output[1].array, [0, [1,2,3,4,5]]);
+        assert.deepEqual(output[2].array, []);
+        assert.strictEqual(output[3].array[0], '1');
+        assert.notStrictEqual(output[3].array[0], 1);
+        assert.strictEqual(typeof output[4].array[1], 'boolean');
+        assert.strictEqual(output[5].array[0], '');
+        assert.deepEqual(output[6].array, [[[[0]]]]);
+      });
+      done();
+  });
   it('works with delimiter', function(done) {
     var content = fs.createReadStream('test/data/csv-dialects/data-del.csv')
     var dp = new spec.DataPackage(dp1);
