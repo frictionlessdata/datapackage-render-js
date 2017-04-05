@@ -1,5 +1,4 @@
-Render data packages and their views to various formats including HTML in both
-Node and the browser.
+Compile and convert Data Package views specifications.
 
 ## Install
 
@@ -9,78 +8,28 @@ Node and the browser.
 npm install datapackage-render
 ```
 
-Install with comamnd line tool:
-
-```
-npm install -g datapackage-render
-```
-
-If you want PNG rendering you will need to install node-canvas which in turn
-requires additional dependencies outside of node such as Cairo (see
-https://github.com/Automattic/node-canvas#installation):
-
-```
-npm install canvas
-```
-
 # Usage
 
 ## Library
 
-**Only local data packages are supported atm**
-
 ```
-var render = require('datapackage-render');
+import dprender from 'datapackage-render'
 
-render.html('path-to-datapackage', function(error, html) {
-  console.log(html);
-});
+// takes a vega spec that was written for datapackage and compiles data values
+// so it is ready and full Vega spec
+let vegaSpec = dprender.compileVegaData(...)
 
-// Render a "view"
+// takes a simple graph spec and generates a plotly spec
+let plotlySpec = dprender.simpleToPlotly(...)
 
-// At the moment we only support vega-lite views (vega coming soon)
+// takes a recline spec and converts it into simple spec
+let simpleSpec = dprender.convertReclineToSimple(...)
 
-// Integration with Data Package is via a resource property on vega-lite data
-// property. At runtime the Data Package resource data is injected into the
-// vega vis. (Proper documentation coming soon)
+// compile a view - normalize and compile data
+let compiledView = dprender.compileView(...)
 
-// for a good example usage see dprender function in cli.js
-
-var dp = new DataPackage('path-to-datapackage');
-var viewIndex = 0;
-
-// if you need to load dp
-// dp.load().then(...)
-
-render.renderView(dp, viewIndex)
-  .then(function(vegaView) {
-    // do something with vegaView object ...
-  });
-
-
-render.renderViewToHtml(dp, viewIndex)
-  .then(function(html) {
-    // do something ...
-  });
-```
-
-## Command Line
-
-```
-// will write html rendering of package metadata to stdout
-dprender html <path-to-data-package>
-
-// will write png output to stdout
-dprender view <path-to-data-package>
-
-// e.g.
-dprender view test/data/dp-vega > tmp.png
-
-// render a view to HTML (using vega)
-dprender viewhtml <path-to-data-package>
-
-// e.g.
-dprender viewhtml test/data/dp-vega > tmp.html
+// takes a [handson]table view and returns HandsOnTable spec
+let hTableSpec = dprender.handsOnTableToHandsOnTable(...)
 ```
 
 ## Research
@@ -141,4 +90,3 @@ Vega and Vege-Lite data structures are different:
 
 
   I've raised an issue about Vega-Lite supporting multiple datasets: https://github.com/vega/vega-lite/issues/1271
-
