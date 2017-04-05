@@ -12,7 +12,7 @@ exports.compileData = compileData;
 exports.findResourceByNameOrIndex = findResourceByNameOrIndex;
 exports.compileView = compileView;
 exports.allResourcesLoaded = allResourcesLoaded;
-exports.getVegaSpec = getVegaSpec;
+exports.compileVegaData = compileVegaData;
 
 var _lodash = require('lodash');
 
@@ -76,7 +76,7 @@ function simpleToPlotly(view) {
   var plotlySpec = {
     data: data,
     layout: {
-      title: view.resources[0].name,
+      title: view.title ? view.title : '',
       height: 450,
       xaxis: {
         title: view.spec.group
@@ -212,9 +212,8 @@ function allResourcesLoaded(vegaData, dp) {
 
 /**
  * Prepare Vega spec
- * Fields that are dates should be specified so
  */
-function getVegaSpec(vegaSpec, dp) {
+function compileVegaData(vegaSpec, dp) {
   var loaded = void 0;
   if (vegaSpec.data) {
     loaded = allResourcesLoaded(vegaSpec.data, dp);
@@ -233,7 +232,7 @@ function getVegaSpec(vegaSpec, dp) {
     vegaSpec.data.forEach(function (dataItem) {
       if (!dataItem.values) {
         var resource = findResourceByNameOrIndex(dp, dataItem.source);
-        var rowsAsObjects = !(resource.format === "topojson");
+        var rowsAsObjects = !(resource.format === "topojson" || resource.format === "geojson");
         var values = getResourceCachedValues(resource, rowsAsObjects);
         dataItem.values = values;
       }
