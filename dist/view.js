@@ -12,7 +12,7 @@ exports.compileData = compileData;
 exports.findResourceByNameOrIndex = findResourceByNameOrIndex;
 exports.compileView = compileView;
 exports.allResourcesLoaded = allResourcesLoaded;
-exports.compileVegaData = compileVegaData;
+exports.vegaToVega = vegaToVega;
 
 var _lodash = require('lodash');
 
@@ -191,54 +191,44 @@ function compileView(inView, dataPackage) {
 
 /**
  * Check if all resources for the view are loaded - vega specific
+ * @param {viewResources} Array of resources
+ * @return {Boolean} true if all resources have _values, otherwise false
  */
-function allResourcesLoaded(vegaData, dp) {
+function allResourcesLoaded(viewResources) {
   var length = 0;
-  vegaData.forEach(function (dataItem) {
-    if (dataItem.values) {
+  viewResources.forEach(function (resource) {
+    if (resource._values) {
       length += 1;
-    } else {
-      var resource = findResourceByNameOrIndex(dp, dataItem.source);
-      if (resource._values) {
-        length += 1;
-      }
     }
   });
-
-  if (length === vegaData.length) {
+  if (length === viewResources.length) {
     return true;
   }
 }
 
 /**
  * Prepare Vega spec
+ * @param {view} compiled view descriptor
+ * @return {Object} vegaSpec - full spec with data values
  */
-function compileVegaData(vegaSpec, dp) {
-  var loaded = void 0;
-  if (vegaSpec.data) {
-    loaded = allResourcesLoaded(vegaSpec.data, dp);
-  } else {
-    vegaSpec.data = [];
-    dp.resources.forEach(function (resource) {
-      vegaSpec.data.push({
-        name: resource.name,
-        source: resource.name
-      });
-    });
-    loaded = allResourcesLoaded(vegaSpec.data, dp);
-  }
-
+function vegaToVega(view) {
+  var vegaSpec = Object.assign({}, view.spec);
+  var loaded = allResourcesLoaded(view.resources);
   if (loaded) {
+    if (!vegaSpec.data) {
+      vegaSpec.data = view.resources.map(function (resource) {
+        return { "name": resource.name };
+      });
+    }
+
     vegaSpec.data.forEach(function (dataItem) {
-      if (!dataItem.values) {
-        var resource = findResourceByNameOrIndex(dp, dataItem.source);
+      if (!dataItem.source && !dataItem.values) {
+        var resource = findResourceByNameOrIndex(view, dataItem.name);
         var rowsAsObjects = !(resource.format === "topojson" || resource.format === "geojson");
-        var values = getResourceCachedValues(resource, rowsAsObjects);
-        dataItem.values = values;
+        dataItem.values = getResourceCachedValues(resource, rowsAsObjects);
       }
     });
+
     return vegaSpec;
-  } else {
-    return;
   }
 }
