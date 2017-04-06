@@ -113,29 +113,43 @@ const mockViews = {
       , series: ['High']
     }
   }
-  , vega1: {
+  , vegaNoDataProperty1: {
     name: 'vega1'
+    , resources: [0]
     , specType: 'vega'
     , spec: {
       scale: [],
       axes: []
     }
   }
-  , vega2: {
+  , vegaNoDataProperty2: {
     name: 'vega2'
+    , specType: 'vega'
+    , spec: {
+      scale: [],
+      axes: []
+    }
+  }
+  , vegaWithDataProperty1: {
+    name: 'vega3'
     , specType: 'vega'
     , spec: {
       data: [
         {
-          name: 'data1'
-          , source: 'demo-resource'
+          name: 'demo-resource'
           , transform: [{type: 'test'}]
+        },
+        {
+          name: 'internal-sourcing'
+          , source: 'demo-resource'
+          , transform: [{type: 'filter'}]
         }
       ]
     }
   }
-  , vega3: {
-    name: 'vega3'
+  , vegaWithDataProperty2: {
+    name: 'vega4'
+    , resources: [0]
     , specType: 'vega'
     , spec: {
       data: [
@@ -144,11 +158,61 @@ const mockViews = {
           , values: [{x:1,y:0}, {x:2,y:5}]
         }
         , {
-          name: 'data2'
-          , source: 'demo-resource'
+          name: 'demo-resource'
         }
       ]
     }
+  }
+}
+
+const vegaExpected = {
+  vegaNoDataProperty: {
+    data: [
+      {
+        name: 'demo-resource'
+        , values: [
+          {'Date': '2014-01-01', 'Open': 14.32, 'High': 14.59}
+          , {'Date': '2014-01-02', 'Open': 14.06, 'High': 14.22}
+          , {'Date': '2014-01-05', 'Open': 13.41, 'High': 14.00}
+        ]
+      }
+    ]
+    , scale: []
+    , axes: []
+  }
+  , vegaWithDataProperty1: {
+    data: [
+      {
+        name: 'demo-resource'
+        , values: [
+          {'Date': '2014-01-01', 'Open': 14.32, 'High': 14.59}
+          , {'Date': '2014-01-02', 'Open': 14.06, 'High': 14.22}
+          , {'Date': '2014-01-05', 'Open': 13.41, 'High': 14.00}
+        ]
+        , transform: [{type: 'test'}]
+      }
+      , {
+        name: 'internal-sourcing'
+        , source: 'demo-resource'
+        , transform: [{type: 'filter'}]
+      }
+    ]
+  }
+  , vegaWithDataProperty2: {
+    data: [
+      {
+        name: 'data1'
+        , values: [{x:1,y:0}, {x:2,y:5}]
+      }
+      , {
+        name: 'demo-resource'
+        , values: [
+          {'Date': '2014-01-01', 'Open': 14.32, 'High': 14.59}
+          , {'Date': '2014-01-02', 'Open': 14.06, 'High': 14.22}
+          , {'Date': '2014-01-05', 'Open': 13.41, 'High': 14.00}
+        ]
+      }
+    ]
   }
 }
 
@@ -422,32 +486,32 @@ describe('Basic view utility functions', () => {
   })
 
   it('allResourcesLoaded works', () => {
-    const out = utils.allResourcesLoaded(mockViews.vega3.spec.data, mockDescriptorWithoutData)
+    const out = utils.allResourcesLoaded(mockDescriptorWithoutData.resources)
     expect(out).toBeFalsy()
-    const out2 = utils.allResourcesLoaded(mockViews.vega3.spec.data, mockDescriptor)
+    const out2 = utils.allResourcesLoaded(mockDescriptor.resources)
     expect(out2).toBeTruthy()
   })
 })
 
-describe('compileVegaData', () => {
-  it('compileVegaData works - vega spec without data property', () => {
-    const out = utils.compileVegaData(mockViews.vega1.spec, mockDescriptor)
-    expect(out.data.length).toEqual(mockDescriptor.resources.length)
-    expect(out.data[0].name).toEqual('demo-resource')
-    expect(out.data[0].source).toEqual('demo-resource')
-    expect(out.data[0].values[0].High).toEqual(14.59)
+describe('vegaToVega function', () => {
+  it('should work with no data property in vega spec', () => {
+    let compiledView1 = utils.compileView(mockViews.vegaNoDataProperty1, mockDescriptor)
+    let compiledView2 = utils.compileView(mockViews.vegaNoDataProperty2, mockDescriptor)
+    const vegaSpec1 = utils.vegaToVega(compiledView1)
+    const vegaSpec2 = utils.vegaToVega(compiledView2)
+    expect(vegaSpec1).toEqual(vegaExpected.vegaNoDataProperty)
+    expect(vegaSpec2).toEqual(vegaExpected.vegaNoDataProperty)
   })
 
-  it('compileVegaData works - vega spec with data property', () => {
-    const out = utils.compileVegaData(mockViews.vega2.spec, mockDescriptor)
-    expect(out.data.length).toEqual(mockViews.vega2.spec.data.length)
-    expect(out.data[0].values[0].High).toEqual(14.59)
-    expect(out.data[0].transform).toEqual(mockViews.vega2.spec.data[0].transform)
+  it('should work with one normal and one internal sourcing dataItem', () => {
+    let compiledView = utils.compileView(mockViews.vegaWithDataProperty1, mockDescriptor)
+    const vegaSpec = utils.vegaToVega(compiledView)
+    expect(vegaSpec).toEqual(vegaExpected.vegaWithDataProperty1)
   })
 
-  it('compileVegaData works - with one inlined and one not inlined data', () => {
-    const out = utils.compileVegaData(mockViews.vega3.spec, mockDescriptor)
-    expect(out.data[0]).toEqual(mockViews.vega3.spec.data[0])
-    expect(out.data[1].values[0].High).toEqual(14.59)
+  it('should work with one inlined and one normal dataItem', () => {
+    let compiledView = utils.compileView(mockViews.vegaWithDataProperty2, mockDescriptor)
+    const vegaSpec = utils.vegaToVega(compiledView)
+    expect(vegaSpec).toEqual(vegaExpected.vegaWithDataProperty2)
   })
 })
