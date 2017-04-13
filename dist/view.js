@@ -13,6 +13,7 @@ exports.findResourceByNameOrIndex = findResourceByNameOrIndex;
 exports.compileView = compileView;
 exports.allResourcesLoaded = allResourcesLoaded;
 exports.vegaToVega = vegaToVega;
+exports.reactVirtualizedToReactVirtualized = reactVirtualizedToReactVirtualized;
 
 var _lodash = require('lodash');
 
@@ -231,4 +232,26 @@ function vegaToVega(view) {
 
     return vegaSpec;
   }
+}
+
+function reactVirtualizedToReactVirtualized(view) {
+  var headers = view.resources[0].schema.fields.map(function (field) {
+    return field.name;
+  }),
+      rowsAsObjects = true,
+      data = view.resources[0]._values ? getResourceCachedValues(view.resources[0], rowsAsObjects) : undefined,
+      headerHeight = 20,
+      rowHeight = 30,
+      rowCount = data ? data.length : 14,
+      height = rowCount * rowHeight + headerHeight > 432 ? 432 : rowCount * rowHeight + headerHeight;
+
+  return {
+    data: data,
+    headers: headers,
+    width: 1136,
+    height: height,
+    headerHeight: headerHeight,
+    rowHeight: rowHeight,
+    rowCount: rowCount
+  };
 }
