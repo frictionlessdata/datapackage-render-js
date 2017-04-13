@@ -242,16 +242,19 @@ function reactVirtualizedToReactVirtualized(view) {
       data = view.resources[0]._values ? getResourceCachedValues(view.resources[0], rowsAsObjects) : undefined,
       headerHeight = 20,
       rowHeight = 30,
-      rowCount = data ? data.length : 14,
-      height = rowCount * rowHeight + headerHeight > 432 ? 432 : rowCount * rowHeight + headerHeight;
+      rowCount = data ? data.length : 0,
+      height = rowCount * rowHeight + headerHeight > 432 ? 432 : rowCount * rowHeight + headerHeight,
+      width = 1136,
+      columnWidth = width / headers.length;
 
   return {
     data: data,
     headers: headers,
-    width: 1136,
+    width: width,
     height: height,
     headerHeight: headerHeight,
     rowHeight: rowHeight,
-    rowCount: rowCount
+    rowCount: rowCount,
+    columnWidth: columnWidth
   };
 }

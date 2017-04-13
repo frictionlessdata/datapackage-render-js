@@ -553,6 +553,7 @@ describe('Data Package View utils - ReactVirtualized ', () => {
       , headerHeight: 20
       , rowHeight: 30
       , rowCount: 3
+      , "columnWidth": 378.6666666666667
     }
 
     expect(outSpec).toEqual(expected)
@@ -574,10 +575,11 @@ describe('Data Package View utils - ReactVirtualized ', () => {
         , 'High'
       ]
       , width: 1136
-      , height: 432
+      , height: 20
       , headerHeight: 20
       , rowHeight: 30
-      , rowCount: 14
+      , rowCount: 0
+      , "columnWidth": 378.6666666666667
     }
 
     expect(outSpec).toEqual(expected)
