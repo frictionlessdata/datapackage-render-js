@@ -30,4 +30,7 @@ let compiledView = dprender.compileView(...)
 
 // takes a [handson]table view and returns HandsOnTable spec
 let hTableSpec = dprender.handsOnTableToHandsOnTable(...)
+
+// takes a reactVirtualized view and returns ReactVirtualized spec
+let reactVirtualizedSpec = dprender.reactVirtualizedToReactVirtualized(...)
 ```
