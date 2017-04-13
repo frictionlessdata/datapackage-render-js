@@ -515,3 +515,71 @@ describe('vegaToVega function', () => {
     expect(vegaSpec).toEqual(vegaExpected.vegaWithDataProperty2)
   })
 })
+
+describe('Data Package View utils - ReactVirtualized ', () => {
+  it('should generate ReactVirtualized -> ReactVirtualized', () => {
+    const view = {
+      name: 'table-resource1'
+      , resources: ['demo-resource']
+      , specType: 'reactvirtualized'
+    }
+    const viewCompiled = utils.compileView(view, mockDescriptor)
+    const outSpec = utils.reactVirtualizedToReactVirtualized(viewCompiled)
+    const expected = {
+      data: [
+        {
+          "Date": "2014-01-01",
+          "High": 14.59,
+          "Open": 14.32
+        },
+        {
+          "Date": "2014-01-02",
+          "High": 14.22,
+          "Open": 14.06
+        },
+        {
+          "Date": "2014-01-05",
+          "High": 14,
+          "Open": 13.41
+        }
+      ]
+      , headers: [
+        'Date'
+        , 'Open'
+        , 'High'
+      ]
+      , width: 1136
+      , height: 30 * 3 + 20
+      , headerHeight: 20
+      , rowHeight: 30
+      , rowCount: 3
+    }
+
+    expect(outSpec).toEqual(expected)
+  })
+
+  it('should generate ReactVirtualized without data', () => {
+    const view = {
+      name: 'table-resource1'
+      , resources: ['demo-resource']
+      , specType: 'reactvirtualized'
+    }
+    const viewCompiled = utils.compileView(view, mockDescriptorWithoutData)
+    const outSpec = utils.reactVirtualizedToReactVirtualized(viewCompiled)
+    const expected = {
+      data: undefined
+      , headers: [
+        'Date'
+        , 'Open'
+        , 'High'
+      ]
+      , width: 1136
+      , height: 432
+      , headerHeight: 20
+      , rowHeight: 30
+      , rowCount: 14
+    }
+
+    expect(outSpec).toEqual(expected)
+  })
+})
