@@ -102,16 +102,10 @@ function handsOnTableToHandsOnTable(view) {
     return field.name;
   });
   var data = getResourceCachedValues(view.resources[0]);
-  var height = null;
-  if (data && data.length > 16) {
-    height = 432;
-  }
   return {
     data: data,
     colHeaders: headers,
     readOnly: true,
-    width: 1136,
-    height: height,
     colWidths: 47,
     rowWidth: 27,
     stretchH: 'all',
