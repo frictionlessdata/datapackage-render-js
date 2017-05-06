@@ -12,7 +12,7 @@ npm install datapackage-render
 
 ## Library
 
-```
+```javascript
 import dprender from 'datapackage-render'
 
 // takes a vega spec that was written for datapackage and compiles data values
