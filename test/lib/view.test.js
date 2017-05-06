@@ -379,8 +379,6 @@ describe('Data Package View utils - HandsOnTable ', () => {
         , 'High'
       ]
       , readOnly: true
-      , width: 1136
-      , height: null
       , colWidths: 47
       , rowWidth: 27
       , stretchH: 'all'
@@ -408,8 +406,6 @@ describe('Data Package View utils - HandsOnTable ', () => {
         , 'High'
       ]
       , readOnly: true
-      , width: 1136
-      , height: null
       , colWidths: 47
       , rowWidth: 27
       , stretchH: 'all'
