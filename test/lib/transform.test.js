@@ -53,7 +53,7 @@ describe('transform functions', () => {
   })
 
   it('can map data (or apply formula)', () => {
-    const expressions = ['d.a * 10', 'd.c / 10', 'd.d + 10']
+    const expressions = ['data.a * 10', 'data.c / 10', 'data.d + 10']
     const as = ['e', 'f', 'g']
     const mappedData = transform.applyFormula(expressions, as, data)
     expect(mappedData[0]).toEqual(data[0])
