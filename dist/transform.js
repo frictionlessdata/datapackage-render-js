@@ -66,17 +66,17 @@ function applyFormula(expressions, as, data) {
 
   for (var i = 0; i < as.length; i++) {
     if (i === 0) {
-      expr[i] = vegadataflow.accessor(function (d) {
+      expr[i] = vegadataflow.accessor(function (data) {
         return eval(e1);
       });
       formulas[i] = df.add(tx.Formula, { expr: expr[i], as: as[i], pulse: col });
     } else {
       if (i === 1) {
-        expr[i] = vegadataflow.accessor(function (d) {
+        expr[i] = vegadataflow.accessor(function (data) {
           return eval(e2);
         });
       } else {
-        expr[i] = vegadataflow.accessor(function (d) {
+        expr[i] = vegadataflow.accessor(function (data) {
           return eval(e3);
         });
       }

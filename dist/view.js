@@ -3,6 +3,10 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; // Utilities and classes for working with Data Package Views
+
+
 exports.getResourceCachedValues = getResourceCachedValues;
 exports.simpleToPlotly = simpleToPlotly;
 exports.handsOnTableToHandsOnTable = handsOnTableToHandsOnTable;
@@ -16,6 +20,12 @@ exports.vegaToVega = vegaToVega;
 exports.reactVirtualizedToReactVirtualized = reactVirtualizedToReactVirtualized;
 
 var _lodash = require('lodash');
+
+var _transform = require('./transform');
+
+var transform = _interopRequireWildcard(_transform);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function getResourceCachedValues(resource) {
   var rowsAsObjects = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
@@ -37,7 +47,6 @@ function getResourceCachedValues(resource) {
  * @param {View} view descriptor with compiled in data
  * @return {Object} Plotly spec
  */
-// Utilities and classes for working with Data Package Views
 function simpleToPlotly(view) {
   var simpleGraphTypesToPlotly = {
     line: {
@@ -155,8 +164,33 @@ function convertReclineToSimple(reclineViewSpec) {
  */
 function compileData(view, dataPackage) {
   var out = view.resources.map(function (resourceId) {
-    var resource = Object.assign({}, findResourceByNameOrIndex(dataPackage, resourceId));
-    return resource;
+    if ((typeof resourceId === 'undefined' ? 'undefined' : _typeof(resourceId)) == 'object') {
+      var resource = Object.assign({}, findResourceByNameOrIndex(dataPackage, resourceId.name));
+      if (resource._values) {
+        var rowsAsObjects = true,
+            prepForTransform = getResourceCachedValues(resource, rowsAsObjects);
+        resourceId.transform.forEach(function (transformObj) {
+          switch (transformObj.type) {
+            case "aggregate":
+              resource._values = transform.aggregate(transformObj.fields, transformObj.operations, prepForTransform);
+              break;
+            case "filter":
+              resource._values = transform.filterByExpr(transformObj.expression, prepForTransform);
+              break;
+            case "formula":
+              resource._values = transform.applyFormula(transformObj.expressions, transformObj.asFields, prepForTransform);
+              break;
+            case "sample":
+              resource._values = transform.sample(transformObj.size, prepForTransform);
+              break;
+          }
+        });
+      }
+      return resource;
+    } else {
+      var _resource = Object.assign({}, findResourceByNameOrIndex(dataPackage, resourceId));
+      return _resource;
+    }
   });
   return out;
 }
