@@ -10,7 +10,12 @@ exports.aggregate = aggregate;
 exports.filterByExpr = filterByExpr;
 exports.applyFormula = applyFormula;
 exports.sample = sample;
-var vegadataflow = require('../vendor/vega-dataflow.js');
+
+var _vegaDataflow = require('../vendor/vega-dataflow.js');
+
+var vegadataflow = _interopRequireWildcard(_vegaDataflow);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var tx = vegadataflow.transforms,
     changeset = vegadataflow.changeset;
