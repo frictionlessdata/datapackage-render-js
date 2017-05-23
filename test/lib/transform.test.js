@@ -56,7 +56,9 @@ describe('transform functions', () => {
     const expressions = ['data.a * 10', 'data.c / 10', 'data.d + 10']
     const as = ['e', 'f', 'g']
     const mappedData = transform.applyFormula(expressions, as, data)
-    expect(mappedData[0]).toEqual(data[0])
+    expect(mappedData[0]['e']).toEqual(data[0]['a'] * 10)
+    expect(mappedData[0]['f']).toEqual(data[0]['c'] / 10)
+    expect(mappedData[0]['g']).toEqual(data[0]['d'] + 10)
   })
 
   it('can sample data', () => {
