@@ -465,6 +465,80 @@ describe('Basic view utility functions', () => {
     expect(out).toEqual(expected)
   })
 
+  it('compileData work with transforms', () => {
+    const resourceId = mockDescriptor.resources[0].name
+    // check it works with aggregate
+    let view = {
+      resources: [
+        {
+          name: resourceId,
+          transform: [
+            {
+              type: "aggregate",
+              fields: ["Open", "High"],
+              operations: ["sum", "max"]
+            }
+          ]
+        }
+      ]
+    }
+    let out = utils.compileData(view, mockDescriptor)
+    expect(out[0]._values[0]["max_High"]).toEqual(14.59)
+    expect(out[0]._values[0]["sum_Open"]).toEqual(41.790000000000006)
+
+    // check it works with filter
+    view.resources[0].transform[0] = {
+      type: "filter",
+      expression: "data['Open'] > 14"
+    }
+    out = utils.compileData(view, mockDescriptor)
+    expect(out[0]._values.length).toEqual(2)
+
+    // check if works with formula
+    view.resources[0].transform[0] = {
+      type: "formula",
+      expressions: ["data['Open'] * 10", "data['High'] - 10"],
+      asFields: ["new1", "new2"]
+    }
+    out = utils.compileData(view, mockDescriptor)
+    expect(out[0]._values[0].new1).toEqual(143.2)
+    expect(out[0]._values[2].new2).toEqual(4)
+
+    // check if works with sample
+    view.resources[0].transform[0] = {
+      type: "sample",
+      size: 2
+    }
+    out = utils.compileData(view, mockDescriptor)
+    expect(out[0]._values.length).toEqual(2)
+  })
+
+  it('works with more than 1 transforms', () => {
+    // apply formula and then get sample
+    const resourceId = mockDescriptor.resources[0].name
+    let view = {
+      resources: [
+        {
+          name: resourceId,
+          transform: [
+            {
+              type: "formula",
+              expressions: ["data['Open'] * 10", "data['High'] - 10"],
+              asFields: ["new1", "new2"]
+            },
+            {
+              type: "sample",
+              size: 2
+            }
+          ]
+        }
+      ]
+    }
+    let out = utils.compileData(view, mockDescriptor)
+    expect(out[0]._values.length).toEqual(2)
+    expect(out[0]._values[0].new1).toBeTruthy // so it has new1 field
+  })
+
   it('findResourceByNameOrIndex with name', () => {
     const out = utils.findResourceByNameOrIndex(mockDescriptor, 'demo-resource')
     expect(out.name).toEqual('demo-resource')
