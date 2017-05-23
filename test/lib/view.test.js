@@ -448,6 +448,27 @@ describe('Basic view utility functions', () => {
     expect(out).toEqual(expected)
   })
 
+  it('getResourceCachedValues works', () => {
+    let rowsAsObjects = false
+    let out = utils.getResourceCachedValues(mockDescriptor.resources[0], rowsAsObjects)
+    expect(out).toEqual(mockTable1)
+
+    rowsAsObjects = true
+    out = utils.getResourceCachedValues(mockDescriptor.resources[0], rowsAsObjects)
+    let expected = [
+      {"Date": "2014-01-01", "High": 14.59, "Open": 14.32},
+      {"Date": "2014-01-02", "High": 14.22, "Open": 14.06},
+      {"Date": "2014-01-05", "High": 14, "Open": 13.41}
+    ]
+    expect(out).toEqual(expected)
+
+    let resourceWithValuesAsObjects = Object.assign({}, mockDescriptor.resources[0])
+    resourceWithValuesAsObjects._values = expected
+    rowsAsObjects = false
+    out = utils.getResourceCachedValues(resourceWithValuesAsObjects, rowsAsObjects)
+    expect(out).toEqual(mockTable1)
+  })
+
   it('compileData works', () => {
     const resourceId = mockDescriptor.resources[0].name
     let view = {
