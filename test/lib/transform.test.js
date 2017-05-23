@@ -1,35 +1,35 @@
 import * as transform from '../../lib/transform'
 
-var data = [
+let data = [
  {
-   "a": 17.76,
-   "b": 20.14,
-   "c": 17.05,
-   "d": 17.79
+   "a": 10,
+   "b": 20,
+   "c": 30,
+   "d": 40
  },
  {
-   "a": 19.19,
-   "b": 21.29,
-   "c": 19.19,
-   "d": 19.92
+   "a": 20,
+   "b": 30,
+   "c": 30,
+   "d": 20
  },
  {
-   "a": 20.33,
-   "b": 22.9,
-   "c": 19.52,
-   "d": 21.12
+   "a": 30,
+   "b": 20,
+   "c": 10,
+   "d": 40
  },
  {
-   "a": 20.15,
-   "b": 20.72,
-   "c": 19.04,
-   "d": 19.31
+   "a": 40,
+   "b": 20,
+   "c": 30,
+   "d": 10
  },
  {
-   "a": 17.93,
-   "b": 18.09,
-   "c": 16.99,
-   "d": 17.01
+   "a": 10,
+   "b": 20,
+   "c": 30,
+   "d": 40
  }
 ]
 
@@ -40,16 +40,16 @@ describe('transform functions', () => {
     const fields = ['a', 'b', 'c', 'd']
     const aggregatedData = transform.aggregate(fields, operations, data)
     expect(aggregatedData[0].count_a).toEqual(5)
-    expect(aggregatedData[0].sum_b).toEqual(103.14)
-    expect(aggregatedData[0].min_c).toEqual(16.99)
-    expect(aggregatedData[0].max_d).toEqual(21.12)
+    expect(aggregatedData[0].sum_b).toEqual(110)
+    expect(aggregatedData[0].min_c).toEqual(10)
+    expect(aggregatedData[0].max_d).toEqual(40)
   })
 
   it('can filter data', () => {
     const expression = 'data["a"] > 19'
     const filteredData = transform.filterByExpr(expression, data)
     expect(filteredData.length).toEqual(3)
-    expect(filteredData[0]["a"]).toEqual(19.19)
+    expect(filteredData[0]["a"]).toEqual(20)
   })
 
   it('can map data (or apply formula)', () => {
