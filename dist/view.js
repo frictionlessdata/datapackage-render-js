@@ -42,9 +42,12 @@ function getResourceCachedValues(resource) {
       var _fieldNames = resource.schema.fields.map(function (field) {
         return field.name;
       });
-      // return map(resource._values, fieldNames)
+
       return (0, _lodash.map)(resource._values, function (row) {
-        return [row.Date, row.Open, row.High];
+        var rowAsArray = _fieldNames.map(function (field) {
+          return row[field];
+        });
+        return rowAsArray;
       });
     }
     return resource._values;
