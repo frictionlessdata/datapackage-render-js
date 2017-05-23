@@ -38,6 +38,15 @@ function getResourceCachedValues(resource) {
       return (0, _lodash.zipObject)(fieldNames, row);
     });
   } else {
+    if (resource._values && resource._values[0].constructor === Object) {
+      var _fieldNames = resource.schema.fields.map(function (field) {
+        return field.name;
+      });
+      // return map(resource._values, fieldNames)
+      return (0, _lodash.map)(resource._values, function (row) {
+        return [row.Date, row.Open, row.High];
+      });
+    }
     return resource._values;
   }
 }
