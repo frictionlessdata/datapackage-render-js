@@ -196,6 +196,7 @@ function compileData(view, dataPackage) {
               resource._values = transform.sample(transformObj.size, prepForTransform);
               break;
           }
+          prepForTransform = resource._values;
         });
       }
       return resource;
