@@ -558,6 +558,22 @@ describe('Basic view utility functions', () => {
     let out = utils.compileData(view, mockDescriptor)
     expect(out[0]._values.length).toEqual(2)
     expect(out[0]._values[0].new1).toBeTruthy // so it has new1 field
+
+    // first filter then apply formula
+    view.resources[0].transform = [
+      {
+        type: "filter",
+        expression: "data['Open'] > 14"
+      },
+      {
+        type: "formula",
+        expressions: ["data['High'] * 10"],
+        asFields: ["High"]
+      }
+    ]
+    out = utils.compileData(view, mockDescriptor)
+    expect(out[0]._values.length).toEqual(2)
+    expect(out[0]._values[0]["High"]).toEqual(145.9)
   })
 
   it('findResourceByNameOrIndex with name', () => {
