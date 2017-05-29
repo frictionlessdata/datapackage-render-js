@@ -504,8 +504,8 @@ describe('Basic view utility functions', () => {
       ]
     }
     let out = utils.compileData(view, mockDescriptor)
-    expect(out[0]._values[0]["max_High"]).toEqual(14.59)
-    expect(out[0]._values[0]["sum_Open"]).toEqual(41.790000000000006)
+    expect(out[0]._values[0]["High"]).toEqual(14.59)
+    expect(out[0]._values[0]["Open"]).toEqual(41.790000000000006)
 
     // check it works with filter
     view.resources[0].transform[0] = {

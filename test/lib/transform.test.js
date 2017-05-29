@@ -39,10 +39,10 @@ describe('transform functions', () => {
     const operations = ['count', 'sum', 'min', 'max']
     const fields = ['a', 'b', 'c', 'd']
     const aggregatedData = transform.aggregate(fields, operations, data)
-    expect(aggregatedData[0].count_a).toEqual(5)
-    expect(aggregatedData[0].sum_b).toEqual(110)
-    expect(aggregatedData[0].min_c).toEqual(10)
-    expect(aggregatedData[0].max_d).toEqual(40)
+    expect(aggregatedData[0].a).toEqual(5)
+    expect(aggregatedData[0].b).toEqual(110)
+    expect(aggregatedData[0].c).toEqual(10)
+    expect(aggregatedData[0].d).toEqual(40)
   })
 
   it('can filter data', () => {

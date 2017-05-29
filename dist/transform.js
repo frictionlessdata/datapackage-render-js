@@ -31,6 +31,7 @@ function aggregate(fields, operations, data) {
       agg = df.add(tx.Aggregate, {
     fields: fieldsForAggregation,
     ops: operations,
+    as: fields,
     pulse: col
   }),
       out = df.add(tx.Collect, { pulse: agg });
