@@ -18,6 +18,7 @@ exports.compileView = compileView;
 exports.allResourcesLoaded = allResourcesLoaded;
 exports.vegaToVega = vegaToVega;
 exports.reactVirtualizedToReactVirtualized = reactVirtualizedToReactVirtualized;
+exports.normalizeDateAndTime = normalizeDateAndTime;
 
 var _lodash = require('lodash');
 
@@ -298,4 +299,43 @@ function reactVirtualizedToReactVirtualized(view) {
     rowCount: rowCount,
     columnWidth: columnWidth
   };
+}
+
+/**
+  * Ensure dates and times in resources are in ISO format.
+  * @param {resource}
+  * @return {resource} with formatted dates and times
+  */
+function normalizeDateAndTime(resource) {
+  if (resource._values) {
+    var dateFields = [],
+        timeFields = [],
+        dateTimeFields = [];
+
+    resource.schema.fields.forEach(function (field, idx) {
+      if (field.type === 'date') {
+        dateFields.push(idx);
+      } else if (field.type === 'time') {
+        timeFields.push(idx);
+      } else if (field.type === 'datetime') {
+        dateTimeFields.push(idx);
+      }
+    });
+
+    resource._values.forEach(function (entry) {
+      dateFields.forEach(function (fieldIdx) {
+        var date = entry[fieldIdx].toString();
+        date = new Date(date.substring(0, 28));
+        entry[fieldIdx] = date.toISOString().substring(0, 10);
+      });
+      timeFields.forEach(function (timeField) {
+        var time = entry[timeField].toISOString();
+        entry[timeField] = time.substring(11, 19);
+      });
+      dateTimeFields.forEach(function (dateTimeField) {
+        entry[dateTimeField] = entry[dateTimeField].toISOString();
+      });
+    });
+  }
+  return resource;
 }

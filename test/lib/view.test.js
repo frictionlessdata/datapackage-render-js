@@ -6,6 +6,12 @@ const mockTable1 = [
   , ['2014-01-05', 13.41, 14.00]
 ]
 
+const mockTable2 = [
+  [new Date('2014-01-02'), new Date('2014-01-02T05:00:00Z'), new Date('2014-01-02T05:00:00Z')]
+  , [new Date('2014-01-03'), new Date('2014-01-03T06:00:00Z'), new Date('2014-01-03T06:00:00Z')]
+  , [new Date('2014-01-06'), new Date('2014-01-06T07:00:00Z'), new Date('2014-01-06T07:00:00Z')]
+]
+
 const mockDescriptor = {
   name: 'demo-package'
   , resources: [
@@ -326,6 +332,28 @@ const plotlyExpected = {
   }
 }
 
+const mockResource = {
+  schema: {
+    fields: [
+      {
+        name: 'Date'
+        , type: 'date'
+        , description: ''
+      }
+      , {
+        name: 'Time'
+        , type: 'time'
+        , description: ''
+      }
+      , {
+        name: 'DateTime'
+        , type: 'datetime'
+        , description: ''
+      }
+    ]
+  },
+  _values: mockTable2
+}
 
 describe('Data Package View utils', () => {
   it('should generate Plotly spec - lines', () => {
@@ -690,5 +718,14 @@ describe('Data Package View utils - ReactVirtualized ', () => {
     }
 
     expect(outSpec).toEqual(expected)
+  })
+})
+
+describe('how normalizeDate works', () => {
+  it('should just work with dates, times and datetimes', () => {
+    let out = utils.normalizeDateAndTime(mockResource)
+    expect(out._values[0][0]).toEqual("2014-01-02")
+    expect(out._values[0][1]).toEqual("05:00:00")
+    expect(out._values[0][2]).toEqual("2014-01-02T05:00:00.000Z")
   })
 })
