@@ -133,7 +133,8 @@ function handsOnTableToHandsOnTable(view) {
     stretchH: 'all',
     columnSorting: true,
     search: true,
-    manualColumnResize: true
+    manualColumnResize: true,
+    viewTitle: view.title
   };
 }
 

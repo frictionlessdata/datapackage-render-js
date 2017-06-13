@@ -443,6 +443,18 @@ describe('Data Package View utils - HandsOnTable ', () => {
     }
     expect(outSpec).toEqual(expected)
   })
+
+  it('should generate handsontable with viewTitle', () => {
+    const view = {
+      name: 'test-for-title'
+      , title: 'title-for-view'
+      , resources: ['demo-resource']
+      , specType: 'handsontable'
+    }
+    const viewCompiled = utils.compileView(view, mockDescriptorWithoutData)
+    const outSpec = utils.handsOnTableToHandsOnTable(viewCompiled)
+    expect(outSpec.viewTitle).toEqual('title-for-view')
+  })
 })
 
 
