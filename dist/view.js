@@ -123,7 +123,14 @@ function handsOnTableToHandsOnTable(view) {
   var headers = view.resources[0].schema.fields.map(function (field) {
     return field.name;
   });
-  var data = getResourceCachedValues(view.resources[0]);
+  var data = void 0;
+  if (view.resources[0]._values) {
+    view.resources[0]._values = getResourceCachedValues(view.resources[0]);
+    data = normalizeDateAndTime(view.resources[0])._values;
+  } else {
+    data = getResourceCachedValues(view.resources[0]);
+  }
+
   return {
     data: data,
     colHeaders: headers,
