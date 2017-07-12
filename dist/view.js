@@ -123,6 +123,14 @@ function handsOnTableToHandsOnTable(view) {
   var headers = view.resources[0].schema.fields.map(function (field) {
     return field.name;
   });
+  var columnsAlignment = [];
+  view.resources[0].schema.fields.forEach(function (field) {
+    if (field.type === 'number' || field.type === 'integer') {
+      columnsAlignment.push({ className: 'htRight' });
+    } else {
+      columnsAlignment.push({ className: 'htLeft' });
+    }
+  });
   var data = void 0;
   if (view.resources[0]._values) {
     view.resources[0]._values = getResourceCachedValues(view.resources[0]);
@@ -141,7 +149,8 @@ function handsOnTableToHandsOnTable(view) {
     columnSorting: true,
     search: true,
     manualColumnResize: true,
-    viewTitle: view.title
+    viewTitle: view.title,
+    columns: columnsAlignment
   };
 }
 

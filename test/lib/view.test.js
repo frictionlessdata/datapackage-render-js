@@ -413,6 +413,17 @@ describe('Data Package View utils - HandsOnTable ', () => {
       , columnSorting: true
       , search: true
       , manualColumnResize: true
+      , columns: [
+        {
+          className: 'htLeft'
+        },
+        {
+          className: 'htRight'
+        },
+        {
+          className: 'htRight'
+        }
+      ]
     }
     // console.log(JSON.stringify(outSpec, null, 2));
     expect(outSpec).toEqual(expected)
@@ -440,6 +451,17 @@ describe('Data Package View utils - HandsOnTable ', () => {
       , columnSorting: true
       , search: true
       , manualColumnResize: true
+      , columns: [
+        {
+          className: 'htLeft'
+        },
+        {
+          className: 'htRight'
+        },
+        {
+          className: 'htRight'
+        }
+      ]
     }
     expect(outSpec).toEqual(expected)
   })
