@@ -12,6 +12,12 @@ const mockTable2 = [
   , [new Date('2014-01-06'), new Date('2014-01-06T07:00:00Z'), new Date('2014-01-06T07:00:00Z')]
 ]
 
+const mockTable3 = [
+  []
+  , [new Date('2014-01-03'), new Date('2014-01-03T06:00:00Z'), new Date('2014-01-03T06:00:00Z')]
+  , [new Date('2014-01-06'),, new Date('2014-01-06T07:00:00Z')]
+]
+
 const mockDescriptor = {
   name: 'demo-package'
   , resources: [
@@ -761,5 +767,13 @@ describe('how normalizeDate works', () => {
     expect(out._values[0][0]).toEqual("2014-01-02")
     expect(out._values[0][1]).toEqual("05:00:00")
     expect(out._values[0][2]).toEqual("2014-01-02T05:00:00.000Z")
+  })
+
+  it('should work with empty values', () => {
+    const mockResourceWithEmptyValues = Object.assign({}, mockResource)
+    mockResourceWithEmptyValues._values = mockTable3
+    let out = utils.normalizeDateAndTime(mockResourceWithEmptyValues)
+    expect(out._values[0][0]).toEqual(undefined)
+    expect(out._values[1][0]).toEqual("2014-01-03")
   })
 })

@@ -341,16 +341,22 @@ function normalizeDateAndTime(resource) {
 
     resource._values.forEach(function (entry) {
       dateFields.forEach(function (fieldIdx) {
-        var date = entry[fieldIdx].toString();
-        date = new Date(date.substring(0, 28));
-        entry[fieldIdx] = date.toISOString().substring(0, 10);
+        if (entry[fieldIdx]) {
+          var date = entry[fieldIdx].toString();
+          date = new Date(date.substring(0, 28));
+          entry[fieldIdx] = date.toISOString().substring(0, 10);
+        }
       });
       timeFields.forEach(function (timeField) {
-        var time = entry[timeField].toISOString();
-        entry[timeField] = time.substring(11, 19);
+        if (entry[timeField]) {
+          var time = entry[timeField].toISOString();
+          entry[timeField] = time.substring(11, 19);
+        }
       });
       dateTimeFields.forEach(function (dateTimeField) {
-        entry[dateTimeField] = entry[dateTimeField].toISOString();
+        if (entry[dateTimeField]) {
+          entry[dateTimeField] = entry[dateTimeField].toISOString();
+        }
       });
     });
   }
