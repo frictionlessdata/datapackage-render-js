@@ -39,7 +39,7 @@ function getResourceCachedValues(resource) {
       return (0, _lodash.zipObject)(fieldNames, row);
     });
   } else {
-    if (resource._values && resource._values[0].constructor === Object) {
+    if (resource._values && (0, _lodash.isPlainObject)(resource._values[0])) {
       var _fieldNames = resource.schema.fields.map(function (field) {
         return field.name;
       });
@@ -172,9 +172,8 @@ function normalizeView(viewSpec) {
 function convertReclineToSimple(reclineViewSpec) {
   var graphTypeConvert = {
     lines: 'line'
-  };
-  // TODO: support multiple series
-  var out = {
+    // TODO: support multiple series
+  };var out = {
     name: reclineViewSpec.id.toLowerCase(),
     specType: 'simple',
     spec: {
@@ -283,7 +282,7 @@ function vegaToVega(view) {
 
     vegaSpec.data.forEach(function (dataItem) {
       if (!dataItem.source && !dataItem.values) {
-        var resource = findResourceByNameOrIndex(view, dataItem.name);
+        var resource = findResourceByNameOrIndex(view, dataItem.source || dataItem.name);
         var rowsAsObjects = !(resource.format === "topojson" || resource.format === "geojson");
         dataItem.values = getResourceCachedValues(resource, rowsAsObjects);
       }

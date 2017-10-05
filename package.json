@@ -27,11 +27,7 @@
     "npm": "2.x.x"
   },
   "jest": {
-    "scriptPreprocessor": "<rootDir>/node_modules/babel-jest",
-    "testFileExtensions": [
-      "es6",
-      "js"
-    ],
+    "transform": {".*": "<rootDir>/node_modules/babel-jest"},
     "moduleFileExtensions": [
       "js",
       "json",
