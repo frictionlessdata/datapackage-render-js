@@ -283,9 +283,14 @@ function vegaToVega(view) {
 
     vegaSpec.data.forEach(function (dataItem) {
       if (!dataItem.source && !dataItem.values) {
-        var resource = findResourceByNameOrIndex(view, dataItem.source || dataItem.name);
-        var rowsAsObjects = !(resource.format === "topojson" || resource.format === "geojson");
-        dataItem.values = getResourceCachedValues(resource, rowsAsObjects);
+        try {
+          var resource = findResourceByNameOrIndex(view, dataItem.name);
+          var rowsAsObjects = !(resource.format === "topojson" || resource.format === "geojson");
+          dataItem.values = getResourceCachedValues(resource, rowsAsObjects);
+        } catch (err) {
+          console.log(err);
+          console.log('> problem caused by ' + dataItem.name);
+        }
       }
     });
 
