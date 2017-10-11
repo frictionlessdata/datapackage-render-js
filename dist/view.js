@@ -102,7 +102,8 @@ function simpleToPlotly(view) {
       title: view.title ? view.title : '',
       height: 450,
       xaxis: {
-        title: view.spec.group
+        title: view.spec.group,
+        tickformat: "%j %M %Y"
       }
     }
   };
