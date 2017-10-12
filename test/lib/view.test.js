@@ -150,6 +150,7 @@ const mockViews = {
         {
           name: 'demo-resource'
           , transform: [{type: 'test'}]
+          , format: {type: 'csv', parse: 'auto'}
         },
         {
           name: 'internal-sourcing'
@@ -202,6 +203,7 @@ const vegaExpected = {
           , {'Date': '2014-01-05', 'Open': 13.41, 'High': 14.00}
         ]
         , transform: [{type: 'test'}]
+        , format: {parse: 'auto'}
       }
       , {
         name: 'internal-sourcing'

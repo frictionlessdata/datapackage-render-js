@@ -292,6 +292,10 @@ function vegaToVega(view) {
           console.log('> problem caused by ' + dataItem.name);
         }
       }
+      // As csv files are compiled into dataItem in json, vega shouldn't parse it as csv:
+      if (dataItem.format && dataItem.format.type === 'csv') {
+        delete dataItem.format.type;
+      }
     });
 
     return vegaSpec;
