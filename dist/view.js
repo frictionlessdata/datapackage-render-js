@@ -96,6 +96,10 @@ function simpleToPlotly(view) {
     return out;
   });
 
+  var xAxisField = view.resources[0].schema.fields.find(function (field) {
+    return field.name === view.spec.group;
+  });
+  var dateFields = ['date', 'year', 'yearmonth'];
   var plotlySpec = {
     data: data,
     layout: {
@@ -103,7 +107,8 @@ function simpleToPlotly(view) {
       height: 450,
       xaxis: {
         title: view.spec.group,
-        tickformat: "%e %b %Y"
+        tickformat: xAxisField.type === 'date' ? "%e %b %Y" : '',
+        type: dateFields.includes(xAxisField.type) ? 'date' : xAxisField.type
       }
     }
   };

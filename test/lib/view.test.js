@@ -256,6 +256,7 @@ const plotlyExpected = {
       , xaxis: {
         title: 'Date'
         , tickformat: "%e %b %Y"
+        , type: 'date'
       }
       , yaxis: {
         title: 'High'
@@ -309,6 +310,7 @@ const plotlyExpected = {
       , xaxis: {
         title: 'Date'
         , tickformat: "%e %b %Y"
+        , type: 'date'
       }
     }
   }
@@ -335,6 +337,7 @@ const plotlyExpected = {
       , xaxis: {
         title: 'Date'
         , tickformat: "%e %b %Y"
+        , type: 'date'
       }
       , yaxis: {
         title: 'High'
