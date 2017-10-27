@@ -32,12 +32,15 @@ function getResourceCachedValues(resource) {
   var rowsAsObjects = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
   if (rowsAsObjects) {
-    var fieldNames = resource.schema.fields.map(function (field) {
-      return field.name;
-    });
-    return resource._values.map(function (row) {
-      return (0, _lodash.zipObject)(fieldNames, row);
-    });
+    if (resource._values && (0, _lodash.isArray)(resource._values[0])) {
+      var fieldNames = resource.schema.fields.map(function (field) {
+        return field.name;
+      });
+      return resource._values.map(function (row) {
+        return (0, _lodash.zipObject)(fieldNames, row);
+      });
+    }
+    return resource._values;
   } else {
     if (resource._values && (0, _lodash.isPlainObject)(resource._values[0])) {
       var _fieldNames = resource.schema.fields.map(function (field) {
