@@ -111,7 +111,8 @@ function simpleToPlotly(view) {
       xaxis: {
         title: view.spec.group,
         tickformat: xAxisField.type === 'date' ? "%e %b %Y" : '',
-        type: dateFields.includes(xAxisField.type) ? 'date' : xAxisField.type
+        type: dateFields.includes(xAxisField.type) ? 'date' : xAxisField.type,
+        tickmode: xValues.length < 10 ? 'linear' : 'auto'
       }
     }
   };
