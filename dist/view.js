@@ -103,6 +103,15 @@ function simpleToPlotly(view) {
     return field.name === view.spec.group;
   });
   var dateFields = ['date', 'year', 'yearmonth'];
+  var shouldBeLinear = false;
+  if (xAxisField.type === 'date') {
+    // If date range is less than 10 days (864000001 miliseconds), we have
+    // repeating dates as Plotly tries to have at least 10 ticks by default.
+    // So if the range is less than 10d, we set `tickmode` property a `linear`
+    // which handles displaying date ticks correctly:
+    var range = new Date(xValues[xValues.length - 1]) - new Date(xValues[0]);
+    shouldBeLinear = range < 864000001;
+  }
   var plotlySpec = {
     data: data,
     layout: {
@@ -112,7 +121,7 @@ function simpleToPlotly(view) {
         title: view.spec.group,
         tickformat: xAxisField.type === 'date' ? "%e %b %Y" : '',
         type: dateFields.includes(xAxisField.type) ? 'date' : xAxisField.type,
-        tickmode: xValues.length < 10 ? 'linear' : 'auto'
+        tickmode: shouldBeLinear ? 'linear' : undefined
       }
     }
   };
