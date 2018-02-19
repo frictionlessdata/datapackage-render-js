@@ -82,6 +82,10 @@ function simpleToPlotly(view) {
   };
   var rowsAsObjects = true;
   var rows = getResourceCachedValues(view.resources[0], rowsAsObjects);
+  // Sort rows based on field for X axis. Only do it if length is not too long:
+  if (rows.length < 1000) {
+    rows = (0, _lodash.sortBy)(rows, [view.spec.group]);
+  }
   var xValues = rows.map(function (row) {
     return row[view.spec.group];
   });
