@@ -776,8 +776,8 @@ describe('how normalizeDate works', () => {
   it('should just work with dates, times and datetimes', () => {
     let out = utils.normalizeDateAndTime(mockResource)
     expect(out._values[0][0]).toEqual("2014-01-02")
-    expect(out._values[0][1]).toEqual("05:00:00")
-    expect(out._values[0][2]).toEqual("2014-01-02T05:00:00.000Z")
+    expect(out._values[0][1]).toEqual("11:00:00")
+    expect(out._values[0][2]).toEqual("2014-01-02T11:00:00Z")
   })
 
   it('should work with empty values', () => {

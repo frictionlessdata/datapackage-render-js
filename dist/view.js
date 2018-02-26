@@ -380,13 +380,15 @@ function normalizeDateAndTime(resource) {
       });
       timeFields.forEach(function (timeField) {
         if (entry[timeField]) {
-          var time = entry[timeField].toISOString();
-          entry[timeField] = time.substring(11, 19);
+          var time = entry[timeField].toTimeString();
+          entry[timeField] = time.substring(0, 8);
         }
       });
       dateTimeFields.forEach(function (dateTimeField) {
         if (entry[dateTimeField]) {
-          entry[dateTimeField] = entry[dateTimeField].toISOString();
+          var difference = entry[dateTimeField].getTimezoneOffset();
+          entry[dateTimeField].setMinutes(entry[dateTimeField].getMinutes() - difference);
+          entry[dateTimeField] = entry[dateTimeField].toISOString().split('.')[0] + 'Z';
         }
       });
     });
