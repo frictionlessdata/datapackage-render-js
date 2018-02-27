@@ -351,6 +351,7 @@ function reactVirtualizedToReactVirtualized(view) {
 
 /**
   * Ensure dates and times in resources are in ISO format.
+  * Also stringify object and array types if they come as JS objects.
   * @param {resource}
   * @return {resource} with formatted dates and times
   */
@@ -358,7 +359,8 @@ function normalizeDateAndTime(resource) {
   if (resource._values) {
     var dateFields = [],
         timeFields = [],
-        dateTimeFields = [];
+        dateTimeFields = [],
+        objectAndArrayFields = [];
 
     resource.schema.fields.forEach(function (field, idx) {
       if (field.type === 'date') {
@@ -367,6 +369,8 @@ function normalizeDateAndTime(resource) {
         timeFields.push(idx);
       } else if (field.type === 'datetime') {
         dateTimeFields.push(idx);
+      } else if (field.type === 'object' || field.type === 'array') {
+        objectAndArrayFields.push(idx);
       }
     });
 
@@ -379,16 +383,21 @@ function normalizeDateAndTime(resource) {
         }
       });
       timeFields.forEach(function (timeField) {
-        if (entry[timeField]) {
+        if (entry[timeField] && entry[timeField] instanceof Date) {
           var time = entry[timeField].toTimeString();
           entry[timeField] = time.substring(0, 8);
         }
       });
       dateTimeFields.forEach(function (dateTimeField) {
-        if (entry[dateTimeField]) {
+        if (entry[dateTimeField] && entry[dateTimeField] instanceof Date) {
           var difference = entry[dateTimeField].getTimezoneOffset();
           entry[dateTimeField].setMinutes(entry[dateTimeField].getMinutes() - difference);
           entry[dateTimeField] = entry[dateTimeField].toISOString().split('.')[0] + 'Z';
+        }
+      });
+      objectAndArrayFields.forEach(function (field) {
+        if ((0, _lodash.isObject)(entry[field])) {
+          entry[field] = JSON.stringify(entry[field]);
         }
       });
     });
