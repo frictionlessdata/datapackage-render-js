@@ -258,9 +258,11 @@ const plotlyExpected = {
         , tickformat: "%e %b %Y"
         , type: 'date'
         , tickmode: 'linear'
+        , ticksuffix: ''
       }
       , yaxis: {
-        title: 'High'
+        title: 'High',
+        ticksuffix: ''
       }
     }
   }
@@ -313,6 +315,11 @@ const plotlyExpected = {
         , tickformat: "%e %b %Y"
         , type: 'date'
         , tickmode: 'linear'
+        , ticksuffix: ''
+      }
+      , yaxis: {
+        title: ''
+        , ticksuffix: ''
       }
     }
   }
@@ -341,9 +348,11 @@ const plotlyExpected = {
         , tickformat: "%e %b %Y"
         , type: 'date'
         , tickmode: 'linear'
+        , ticksuffix: ''
       }
       , yaxis: {
         title: 'High'
+        , ticksuffix: ''
       }
     }
   }

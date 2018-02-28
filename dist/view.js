@@ -125,15 +125,15 @@ function simpleToPlotly(view) {
         title: view.spec.group,
         tickformat: xAxisField.type === 'date' ? "%e %b %Y" : '',
         type: dateFields.includes(xAxisField.type) ? 'date' : xAxisField.type,
-        tickmode: shouldBeLinear ? 'linear' : undefined
+        tickmode: shouldBeLinear ? 'linear' : undefined,
+        ticksuffix: view.spec.xSuffix || ''
+      },
+      yaxis: {
+        title: view.spec.series.length === 1 ? view.spec.series[0] : '',
+        ticksuffix: view.spec.ySuffix || ''
       }
     }
   };
-  if (view.spec.series.length === 1) {
-    plotlySpec.layout.yaxis = {
-      title: view.spec.series[0]
-    };
-  }
   return plotlySpec;
 }
 
