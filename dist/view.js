@@ -122,14 +122,14 @@ function simpleToPlotly(view) {
       title: view.title ? view.title : '',
       height: 450,
       xaxis: {
-        title: view.spec.group,
+        title: view.spec.xTitle || view.spec.group,
         tickformat: xAxisField.type === 'date' ? "%e %b %Y" : '',
         type: dateFields.includes(xAxisField.type) ? 'date' : xAxisField.type,
         tickmode: shouldBeLinear ? 'linear' : undefined,
         ticksuffix: view.spec.xSuffix || ''
       },
       yaxis: {
-        title: view.spec.series.length === 1 ? view.spec.series[0] : '',
+        title: view.spec.yTitle || (view.spec.series.length === 1 ? view.spec.series[0] : ''),
         ticksuffix: view.spec.ySuffix || ''
       }
     }
