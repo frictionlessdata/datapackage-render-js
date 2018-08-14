@@ -246,7 +246,7 @@ const plotlyExpected = {
         ]
         , type: 'scatter'
         , mode: 'lines'
-        , line: { width: 2, shape: 'spline' }
+        , line: { width: 1.5, shape: 'spline', dash:	'solid' }
         , name: 'High'
       }
     ]
@@ -264,6 +264,17 @@ const plotlyExpected = {
         title: 'High',
         ticksuffix: ''
       }
+      , font: {
+        family: "\"Open Sans\", verdana, arial, sans-serif"
+        , size: 12
+        , color: "rgb(169, 169, 169)"
+      }
+      , titlefont: {
+        family:	"\"Open Sans\", verdana, arial, sans-serif"
+        , size:	17
+        , color: "rgb(76, 76, 76)"
+      }
+      , colorway: ['#0a0a0a', '#ff8a0e', '#dadada', '#f4eb41', '#d10808', '#5bd107']
     }
   }
   , simple2: {
@@ -283,8 +294,9 @@ const plotlyExpected = {
         , type: 'scatter'
         , mode: 'lines'
         , line: {
-          width: 2
+          width: 1.5
           , shape: 'spline'
+          , dash: 'solid'
         }
       }
       , {
@@ -302,8 +314,9 @@ const plotlyExpected = {
         , type: 'scatter'
         , mode: 'lines'
         , line: {
-          width: 2
-  , shape: 'spline'
+          width: 1.5
+          , shape: 'spline'
+          , dash: 'solid'
         }
       }
     ]
@@ -321,6 +334,17 @@ const plotlyExpected = {
         title: ''
         , ticksuffix: ''
       }
+      , font: {
+        family: "\"Open Sans\", verdana, arial, sans-serif"
+        , size: 12
+        , color: "rgb(169, 169, 169)"
+      }
+      , titlefont: {
+        family:	"\"Open Sans\", verdana, arial, sans-serif"
+        , size:	17
+        , color: "rgb(76, 76, 76)"
+      }
+      , colorway: ['#0a0a0a', '#ff8a0e', '#dadada', '#f4eb41', '#d10808', '#5bd107']
     }
   }
   , simpleBar: {
@@ -354,6 +378,17 @@ const plotlyExpected = {
         title: 'High'
         , ticksuffix: ''
       }
+      , font: {
+        family: "\"Open Sans\", verdana, arial, sans-serif"
+        , size: 12
+        , color: "rgb(169, 169, 169)"
+      }
+      , titlefont: {
+        family:	"\"Open Sans\", verdana, arial, sans-serif"
+        , size:	17
+        , color: "rgb(76, 76, 76)"
+      }
+      , colorway: ['#0a0a0a', '#ff8a0e', '#dadada', '#f4eb41', '#d10808', '#5bd107']
     }
   }
 }

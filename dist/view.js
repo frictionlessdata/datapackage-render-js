@@ -64,21 +64,22 @@ function getResourceCachedValues(resource) {
  * @return {Object} Plotly spec
  */
 function simpleToPlotly(view) {
-  var simpleGraphTypesToPlotly = {
+  var lineSpec = {
+    type: 'scatter',
+    mode: 'lines',
     line: {
-      type: 'scatter',
-      mode: 'lines',
-      line: {
-        width: 2,
-        shape: 'spline'
-      }
-    },
+      width: 1.5,
+      shape: 'spline',
+      dash: 'solid'
+    }
+  };
+  var simpleGraphTypesToPlotly = {
+    line: lineSpec,
     bar: {
       type: 'bar'
     },
-    scatter: {
-      type: 'scatter'
-    }
+    scatter: lineSpec,
+    'lines-and-points': lineSpec
   };
   var rowsAsObjects = true;
   var rows = getResourceCachedValues(view.resources[0], rowsAsObjects);
@@ -131,7 +132,18 @@ function simpleToPlotly(view) {
       yaxis: {
         title: view.spec.yTitle || (view.spec.series.length === 1 ? view.spec.series[0] : ''),
         ticksuffix: view.spec.ySuffix || ''
-      }
+      },
+      font: {
+        family: "\"Open Sans\", verdana, arial, sans-serif",
+        size: 12,
+        color: "rgb(169, 169, 169)"
+      },
+      titlefont: {
+        family: "\"Open Sans\", verdana, arial, sans-serif",
+        size: 17,
+        color: "rgb(76, 76, 76)"
+      },
+      colorway: ['#0a0a0a', '#ff8a0e', '#dadada', '#f4eb41', '#d10808', '#5bd107']
     }
   };
   return plotlySpec;
