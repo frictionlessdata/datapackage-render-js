@@ -274,7 +274,7 @@ const plotlyExpected = {
         , size:	17
         , color: "rgb(76, 76, 76)"
       }
-      , colorway: ['#0a0a0a', '#ff8a0e', '#dadada', '#f4eb41', '#d10808', '#5bd107']
+      , colorway: ['#0a0a0a', '#ff8a0e', '#dadada', '#f4eb41', '#d10808', '#5bd107', '#2274A5', '#E83F6F', '#6E9887', '#3A435E', '#861388', '#9F8082']
     }
   }
   , simple2: {
@@ -344,7 +344,7 @@ const plotlyExpected = {
         , size:	17
         , color: "rgb(76, 76, 76)"
       }
-      , colorway: ['#0a0a0a', '#ff8a0e', '#dadada', '#f4eb41', '#d10808', '#5bd107']
+      , colorway: ['#0a0a0a', '#ff8a0e', '#dadada', '#f4eb41', '#d10808', '#5bd107', '#2274A5', '#E83F6F', '#6E9887', '#3A435E', '#861388', '#9F8082']
     }
   }
   , simpleBar: {
@@ -388,7 +388,7 @@ const plotlyExpected = {
         , size:	17
         , color: "rgb(76, 76, 76)"
       }
-      , colorway: ['#0a0a0a', '#ff8a0e', '#dadada', '#f4eb41', '#d10808', '#5bd107']
+      , colorway: ['#0a0a0a', '#ff8a0e', '#dadada', '#f4eb41', '#d10808', '#5bd107', '#2274A5', '#E83F6F', '#6E9887', '#3A435E', '#861388', '#9F8082']
     }
   }
 }
