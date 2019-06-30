@@ -31,11 +31,17 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function getResourceCachedValues(resource) {
   var rowsAsObjects = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
+  var fieldNames = void 0;
+  if (resource.schema) {
+    fieldNames = resource.schema.fields.map(function (field) {
+      return field.name;
+    });
+  }
   if (rowsAsObjects) {
     if (resource._values && (0, _lodash.isArray)(resource._values[0])) {
-      var fieldNames = resource.schema.fields.map(function (field) {
-        return field.name;
-      });
+      if (!fieldNames) {
+        fieldNames = resource._values[0];
+      }
       return resource._values.map(function (row) {
         return (0, _lodash.zipObject)(fieldNames, row);
       });
@@ -43,12 +49,11 @@ function getResourceCachedValues(resource) {
     return resource._values;
   } else {
     if (resource._values && (0, _lodash.isPlainObject)(resource._values[0])) {
-      var _fieldNames = resource.schema.fields.map(function (field) {
-        return field.name;
-      });
-
+      if (!fieldNames) {
+        fieldNames = Object.keys(resource._values[0]);
+      }
       return (0, _lodash.map)(resource._values, function (row) {
-        var rowAsArray = _fieldNames.map(function (field) {
+        var rowAsArray = fieldNames.map(function (field) {
           return row[field];
         });
         return rowAsArray;
@@ -155,17 +160,26 @@ function simpleToPlotly(view) {
  * @return {Object} HandsOnTable spec
  */
 function handsOnTableToHandsOnTable(view) {
-  var headers = view.resources[0].schema.fields.map(function (field) {
-    return field.name;
-  });
-  var columnsAlignment = [];
-  view.resources[0].schema.fields.forEach(function (field) {
-    if (field.type === 'number' || field.type === 'integer') {
-      columnsAlignment.push({ className: 'htRight' });
-    } else {
-      columnsAlignment.push({ className: 'htLeft' });
+  var headers = void 0;
+  var columnsAlignment = void 0;
+  if (view.resources[0].schema) {
+    headers = view.resources[0].schema.fields.map(function (field) {
+      return field.title || field.name;
+    });
+    view.resources[0].schema.fields.forEach(function (field) {
+      if (field.type === 'number' || field.type === 'integer') {
+        columnsAlignment.push({ className: 'htRight' });
+      } else {
+        columnsAlignment.push({ className: 'htLeft' });
+      }
+    });
+  } else {
+    if ((0, _lodash.isArray)(view.resources[0]._values[0])) {
+      headers = view.resources[0]._values[0];
+    } else if ((0, _lodash.isPlainObject)(view.resources[0]._values[0])) {
+      headers = Object.keys(view.resources[0]._values[0]);
     }
-  });
+  }
   var data = void 0;
   if (view.resources[0]._values) {
     view.resources[0]._values = getResourceCachedValues(view.resources[0]);
@@ -368,6 +382,9 @@ function reactVirtualizedToReactVirtualized(view) {
   * @return {resource} with formatted dates and times
   */
 function normalizeDateAndTime(resource) {
+  if (!resource.schema) {
+    return resource;
+  }
   if (resource._values) {
     var dateFields = [],
         timeFields = [],
