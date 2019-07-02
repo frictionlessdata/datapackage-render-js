@@ -161,7 +161,7 @@ function simpleToPlotly(view) {
  */
 function handsOnTableToHandsOnTable(view) {
   var headers = void 0;
-  var columnsAlignment = void 0;
+  var columnsAlignment = [];
   if (view.resources[0].schema) {
     headers = view.resources[0].schema.fields.map(function (field) {
       return field.title || field.name;
