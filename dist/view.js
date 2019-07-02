@@ -199,7 +199,7 @@ function handsOnTableToHandsOnTable(view) {
     search: true,
     manualColumnResize: true,
     viewTitle: view.title,
-    columns: columnsAlignment,
+    columns: !!columnsAlignment.length ? columnsAlignment : undefined,
     headerTooltips: true,
     manualColumnMove: true
   };

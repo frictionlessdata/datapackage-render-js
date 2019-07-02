@@ -485,6 +485,9 @@ describe('Data Package View utils - HandsOnTable ', () => {
           className: 'htRight'
         }
       ]
+      , headerTooltips: true
+      , manualColumnMove: true
+      , viewTitle: undefined
     }
     // console.log(JSON.stringify(outSpec, null, 2));
     expect(outSpec).toEqual(expected)
@@ -523,6 +526,9 @@ describe('Data Package View utils - HandsOnTable ', () => {
           className: 'htRight'
         }
       ]
+      , viewTitle: undefined
+      , headerTooltips: true
+      , manualColumnMove: true
     }
     expect(outSpec).toEqual(expected)
   })
