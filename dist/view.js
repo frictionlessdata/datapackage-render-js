@@ -199,7 +199,9 @@ function handsOnTableToHandsOnTable(view) {
     search: true,
     manualColumnResize: true,
     viewTitle: view.title,
-    columns: columnsAlignment
+    columns: columnsAlignment,
+    headerTooltips: true,
+    manualColumnMove: true
   };
 }
 
