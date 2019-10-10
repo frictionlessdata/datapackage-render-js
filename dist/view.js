@@ -201,7 +201,9 @@ function handsOnTableToHandsOnTable(view) {
     viewTitle: view.title,
     columns: !!columnsAlignment.length ? columnsAlignment : undefined,
     headerTooltips: true,
-    manualColumnMove: true
+    manualColumnMove: true,
+    rowcount: data ? data.length : 0,
+    totalrowcount: view.resources[0].totalrowcount
   };
 }
 
