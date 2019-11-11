@@ -470,6 +470,8 @@ describe('Data Package View utils - HandsOnTable ', () => {
       , readOnly: true
       , colWidths: 47
       , rowWidth: 27
+      , rowCount: 3
+      , totalRowCount: undefined
       , stretchH: 'all'
       , columnSorting: true
       , search: true
@@ -511,6 +513,8 @@ describe('Data Package View utils - HandsOnTable ', () => {
       , readOnly: true
       , colWidths: 47
       , rowWidth: 27
+      , rowCount: 0
+      , totalRowCount: undefined
       , stretchH: 'all'
       , columnSorting: true
       , search: true
