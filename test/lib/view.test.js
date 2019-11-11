@@ -15,7 +15,7 @@ const mockTable2 = [
 const mockTable3 = [
   []
   , [new Date('2014-01-03'), new Date('2014-01-03T06:00:00Z'), new Date('2014-01-03T06:00:00Z')]
-  , [new Date('2014-01-06'),, new Date('2014-01-06T07:00:00Z')]
+  , [new Date('2014-01-06'), , new Date('2014-01-06T07:00:00Z')]
 ]
 
 const mockDescriptor = {
@@ -52,7 +52,7 @@ const mockDescriptor = {
   , views: []
 }
 
-const mockDescriptorWithoutData =  {
+const mockDescriptorWithoutData = {
   name: 'demo-package'
   , resources: [
     {
@@ -103,6 +103,7 @@ const mockViews = {
       type: 'line'
       , group: 'Date'
       , series: ['High']
+      , colorway: ['#0b0a0c']
     }
   }
   , simple2: {
@@ -149,13 +150,13 @@ const mockViews = {
       data: [
         {
           name: 'demo-resource'
-          , transform: [{type: 'test'}]
-          , format: {type: 'csv', parse: 'auto'}
+          , transform: [{ type: 'test' }]
+          , format: { type: 'csv', parse: 'auto' }
         },
         {
           name: 'internal-sourcing'
           , source: 'demo-resource'
-          , transform: [{type: 'filter'}]
+          , transform: [{ type: 'filter' }]
         }
       ]
     }
@@ -168,7 +169,7 @@ const mockViews = {
       data: [
         {
           name: 'data1'
-          , values: [{x:1,y:0}, {x:2,y:5}]
+          , values: [{ x: 1, y: 0 }, { x: 2, y: 5 }]
         }
         , {
           name: 'demo-resource'
@@ -184,9 +185,9 @@ const vegaExpected = {
       {
         name: 'demo-resource'
         , values: [
-          {'Date': '2014-01-01', 'Open': 14.32, 'High': 14.59}
-          , {'Date': '2014-01-02', 'Open': 14.06, 'High': 14.22}
-          , {'Date': '2014-01-05', 'Open': 13.41, 'High': 14.00}
+          { 'Date': '2014-01-01', 'Open': 14.32, 'High': 14.59 }
+          , { 'Date': '2014-01-02', 'Open': 14.06, 'High': 14.22 }
+          , { 'Date': '2014-01-05', 'Open': 13.41, 'High': 14.00 }
         ]
       }
     ]
@@ -198,17 +199,17 @@ const vegaExpected = {
       {
         name: 'demo-resource'
         , values: [
-          {'Date': '2014-01-01', 'Open': 14.32, 'High': 14.59}
-          , {'Date': '2014-01-02', 'Open': 14.06, 'High': 14.22}
-          , {'Date': '2014-01-05', 'Open': 13.41, 'High': 14.00}
+          { 'Date': '2014-01-01', 'Open': 14.32, 'High': 14.59 }
+          , { 'Date': '2014-01-02', 'Open': 14.06, 'High': 14.22 }
+          , { 'Date': '2014-01-05', 'Open': 13.41, 'High': 14.00 }
         ]
-        , transform: [{type: 'test'}]
-        , format: {parse: 'auto'}
+        , transform: [{ type: 'test' }]
+        , format: { parse: 'auto' }
       }
       , {
         name: 'internal-sourcing'
         , source: 'demo-resource'
-        , transform: [{type: 'filter'}]
+        , transform: [{ type: 'filter' }]
       }
     ]
   }
@@ -216,14 +217,14 @@ const vegaExpected = {
     data: [
       {
         name: 'data1'
-        , values: [{x:1,y:0}, {x:2,y:5}]
+        , values: [{ x: 1, y: 0 }, { x: 2, y: 5 }]
       }
       , {
         name: 'demo-resource'
         , values: [
-          {'Date': '2014-01-01', 'Open': 14.32, 'High': 14.59}
-          , {'Date': '2014-01-02', 'Open': 14.06, 'High': 14.22}
-          , {'Date': '2014-01-05', 'Open': 13.41, 'High': 14.00}
+          { 'Date': '2014-01-01', 'Open': 14.32, 'High': 14.59 }
+          , { 'Date': '2014-01-02', 'Open': 14.06, 'High': 14.22 }
+          , { 'Date': '2014-01-05', 'Open': 13.41, 'High': 14.00 }
         ]
       }
     ]
@@ -246,7 +247,7 @@ const plotlyExpected = {
         ]
         , type: 'scatter'
         , mode: 'lines'
-        , line: { width: 1.5, shape: 'spline', dash:	'solid' }
+        , line: { width: 1.5, shape: 'spline', dash: 'solid' }
         , name: 'High'
       }
     ]
@@ -270,11 +271,11 @@ const plotlyExpected = {
         , color: "rgb(169, 169, 169)"
       }
       , titlefont: {
-        family:	"\"Open Sans\", verdana, arial, sans-serif"
-        , size:	17
+        family: "\"Open Sans\", verdana, arial, sans-serif"
+        , size: 17
         , color: "rgb(76, 76, 76)"
       }
-      , colorway: ['#0a0a0a', '#ff8a0e', '#dadada', '#f4eb41', '#d10808', '#5bd107', '#2274A5', '#E83F6F', '#6E9887', '#3A435E', '#861388', '#9F8082']
+      , colorway: ['#0b0a0c']
     }
   }
   , simple2: {
@@ -307,8 +308,8 @@ const plotlyExpected = {
         ]
         , y: [
           14.32
-  , 14.06
-  , 13.41
+          , 14.06
+          , 13.41
         ]
         , name: 'Open'
         , type: 'scatter'
@@ -340,8 +341,8 @@ const plotlyExpected = {
         , color: "rgb(169, 169, 169)"
       }
       , titlefont: {
-        family:	"\"Open Sans\", verdana, arial, sans-serif"
-        , size:	17
+        family: "\"Open Sans\", verdana, arial, sans-serif"
+        , size: 17
         , color: "rgb(76, 76, 76)"
       }
       , colorway: ['#0a0a0a', '#ff8a0e', '#dadada', '#f4eb41', '#d10808', '#5bd107', '#2274A5', '#E83F6F', '#6E9887', '#3A435E', '#861388', '#9F8082']
@@ -384,8 +385,8 @@ const plotlyExpected = {
         , color: "rgb(169, 169, 169)"
       }
       , titlefont: {
-        family:	"\"Open Sans\", verdana, arial, sans-serif"
-        , size:	17
+        family: "\"Open Sans\", verdana, arial, sans-serif"
+        , size: 17
         , color: "rgb(76, 76, 76)"
       }
       , colorway: ['#0a0a0a', '#ff8a0e', '#dadada', '#f4eb41', '#d10808', '#5bd107', '#2274A5', '#E83F6F', '#6E9887', '#3A435E', '#861388', '#9F8082']
@@ -589,9 +590,9 @@ describe('Basic view utility functions', () => {
     rowsAsObjects = true
     out = utils.getResourceCachedValues(mockDescriptor.resources[0], rowsAsObjects)
     let expected = [
-      {"Date": "2014-01-01", "High": 14.59, "Open": 14.32},
-      {"Date": "2014-01-02", "High": 14.22, "Open": 14.06},
-      {"Date": "2014-01-05", "High": 14, "Open": 13.41}
+      { "Date": "2014-01-01", "High": 14.59, "Open": 14.32 },
+      { "Date": "2014-01-02", "High": 14.22, "Open": 14.06 },
+      { "Date": "2014-01-05", "High": 14, "Open": 13.41 }
     ]
     expect(out).toEqual(expected)
 
@@ -607,7 +608,7 @@ describe('Basic view utility functions', () => {
     let view = {
       resources: [resourceId]
     }
-    const expected = [ mockDescriptor.resources[0] ]
+    const expected = [mockDescriptor.resources[0]]
     let out = utils.compileData(view, mockDescriptor)
     expect(out).toEqual(expected)
 
