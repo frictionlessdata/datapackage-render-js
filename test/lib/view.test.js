@@ -126,6 +126,18 @@ const mockViews = {
       , series: ['High']
     }
   }
+
+  , simpleBarHorizontalStack: {
+    name: 'simpleBarHorizontalStackName'
+    , title: 'simpleBarHorizontalStackTitle'
+    , specType: 'simple'
+    , spec: {
+      type: 'bar-horizontal-stack'
+      , group: 'Date'
+      , series: ['High']
+    }
+  }
+
   , vegaNoDataProperty1: {
     name: 'vega1'
     , resources: [0]
@@ -392,6 +404,52 @@ const plotlyExpected = {
       , colorway: ['#0a0a0a', '#ff8a0e', '#dadada', '#f4eb41', '#d10808', '#5bd107', '#2274A5', '#E83F6F', '#6E9887', '#3A435E', '#861388', '#9F8082']
     }
   }
+  , simpleBarHorizontalStack: {
+    data: [
+      {
+        y: [
+          '2014-01-01'
+          , '2014-01-02'
+          , '2014-01-05'
+        ]
+        , x: [
+          14.59
+          , 14.22
+          , 14
+        ]
+        , name: 'High'
+        , type: 'bar'
+        , orientation: 'h'
+      }
+    ]
+    , layout: {
+      title: 'simpleBarHorizontalStackTitle'
+      , barmode: 'stack'
+      , height: 450
+      , yaxis: {
+        title: 'Date'
+        , tickformat: "%e %b %Y"
+        , type: 'date'
+        , tickmode: 'linear'
+        , ticksuffix: ''
+      }
+      , xaxis: {
+        title: 'High'
+        , ticksuffix: ''
+      }
+      , font: {
+        family: "\"Open Sans\", verdana, arial, sans-serif"
+        , size: 12
+        , color: "rgb(169, 169, 169)"
+      }
+      , titlefont: {
+        family: "\"Open Sans\", verdana, arial, sans-serif"
+        , size: 17
+        , color: "rgb(76, 76, 76)"
+      }
+      , colorway: ['#0a0a0a', '#ff8a0e', '#dadada', '#f4eb41', '#d10808', '#5bd107', '#2274A5', '#E83F6F', '#6E9887', '#3A435E', '#861388', '#9F8082']
+    }
+  }
 }
 
 const mockResource = {
@@ -432,6 +490,11 @@ describe('Data Package View utils', () => {
     const view = utils.compileView(mockViews.simpleBar, mockDescriptor)
     const plotlySpec = utils.simpleToPlotly(view)
     expect(plotlySpec).toEqual(plotlyExpected.simpleBar)
+  })
+  it('should generate Plotly spec - horizontal bar', () => {
+    const view = utils.compileView(mockViews.simpleBarHorizontalStack, mockDescriptor)
+    const plotlySpec = utils.simpleToPlotly(view)
+    expect(plotlySpec).toEqual(plotlyExpected.simpleBarHorizontalStack)
   })
 })
 

@@ -83,6 +83,10 @@ function simpleToPlotly(view) {
     bar: {
       type: 'bar'
     },
+    "bar-horizontal-stack": {
+      type: 'bar',
+      orientation: 'h'
+    },
     scatter: lineSpec,
     'lines-and-points': lineSpec
   };
@@ -92,19 +96,27 @@ function simpleToPlotly(view) {
   if (rows.length < 1000) {
     rows = (0, _lodash.sortBy)(rows, [view.spec.group]);
   }
-  var xValues = rows.map(function (row) {
+  var groupValues = rows.map(function (row) {
     return row[view.spec.group];
   });
   // generate the plotly series
   // { 'x': ..., 'y': ..., 'type': ...}
   var data = view.spec.series.map(function (serie) {
-    var out = {
-      x: xValues,
-      y: rows.map(function (row) {
+
+    var out = { name: serie };
+
+    // horizontal graphs group by y values, vertical by x
+    if (view.spec.type === "bar-horizontal-stack") {
+      out.x = rows.map(function (row) {
         return row[serie];
-      }),
-      name: serie
-    };
+      });
+      out.y = groupValues;
+    } else {
+      out.x = groupValues;
+      out.y = rows.map(function (row) {
+        return row[serie];
+      });
+    }
     Object.assign(out, simpleGraphTypesToPlotly[view.spec.type]);
     return out;
   });
@@ -119,7 +131,7 @@ function simpleToPlotly(view) {
     // repeating dates as Plotly tries to have at least 10 ticks by default.
     // So if the range is less than 10d, we set `tickmode` property a `linear`
     // which handles displaying date ticks correctly:
-    var range = new Date(xValues[xValues.length - 1]) - new Date(xValues[0]);
+    var range = new Date(groupValues[groupValues.length - 1]) - new Date(groupValues[0]);
     shouldBeLinear = range < 864000001;
   }
   var plotlySpec = {
@@ -150,8 +162,20 @@ function simpleToPlotly(view) {
       },
       colorway: view.spec.colorway ? view.spec.colorway : ['#0a0a0a', '#ff8a0e', '#dadada', '#f4eb41', '#d10808', '#5bd107', '#2274A5', '#E83F6F', '#6E9887', '#3A435E', '#861388', '#9F8082']
     }
-  };
+
+    // modify specs for horizontal graphs
+  };if (view.spec.type === "bar-horizontal-stack") {
+    swap(plotlySpec.layout, 'xaxis', 'yaxis');
+    plotlySpec.layout['barmode'] = 'stack';
+  }
+
   return plotlySpec;
+}
+
+function swap(object, property1, property2) {
+  var temp = object[property1];
+  object[property1] = object[property2];
+  object[property2] = temp;
 }
 
 /**
