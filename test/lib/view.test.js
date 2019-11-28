@@ -177,6 +177,124 @@ const mockViews = {
       ]
     }
   }
+  , plotlyWithNoData: {
+    name: 'plotly1'
+    , resources: [0]
+    , specType: 'plotly'
+    , spec: {
+      layout: {
+        title: "Plotly Layout Title"
+        , height: 450
+        , xaxis: {
+          title: 'Date'
+          , tickformat: "%e %b %Y"
+          , type: 'date'
+          , tickmode: 'linear'
+          , ticksuffix: ''
+        }
+        , yaxis: {
+          title: 'High',
+          ticksuffix: ''
+        }
+        , font: {
+          family: "\"Open Sans\", verdana, arial, sans-serif"
+          , size: 12
+          , color: "rgb(169, 169, 169)"
+        }
+        , titlefont: {
+          family: "\"Open Sans\", verdana, arial, sans-serif"
+          , size: 17
+          , color: "rgb(76, 76, 76)"
+        }
+      }
+    }
+  }
+  , plotlyWithDataPropertyButNoData: {
+    name: 'plotly1'
+    , resources: [0]
+    , specType: 'plotly'
+    , spec: {
+      data: [
+        {
+          type: 'scatter'
+          , mode: 'lines'
+          , line: { width: 1.5, shape: 'spline', dash: 'solid' }
+          , name: 'High'
+        }
+      ]
+      , layout: {
+        title: "Plotly Layout Title"
+        , height: 450
+        , xaxis: {
+          title: 'Date'
+          , tickformat: "%e %b %Y"
+          , type: 'date'
+          , tickmode: 'linear'
+          , ticksuffix: ''
+        }
+        , yaxis: {
+          title: 'High',
+          ticksuffix: ''
+        }
+        , font: {
+          family: "\"Open Sans\", verdana, arial, sans-serif"
+          , size: 12
+          , color: "rgb(169, 169, 169)"
+        }
+        , titlefont: {
+          family: "\"Open Sans\", verdana, arial, sans-serif"
+          , size: 17
+          , color: "rgb(76, 76, 76)"
+        }
+      }
+    }
+  }
+  , plotlyWithData: {
+    name: 'plotly1'
+    , resources: [0]
+    , specType: 'plotly'
+    , spec: {
+      layout: {
+        data: [
+          {
+            x: [
+              '2014-01-01'
+              , '2014-01-02'
+              , '2014-01-05'
+            ]
+            , y: [
+              14.59
+              , 14.22
+              , 14
+            ]
+          }
+        ]
+        , title: "Plotly Layout Title"
+        , height: 450
+        , xaxis: {
+          title: 'Date'
+          , tickformat: "%e %b %Y"
+          , type: 'date'
+          , tickmode: 'linear'
+          , ticksuffix: ''
+        }
+        , yaxis: {
+          title: 'High',
+          ticksuffix: ''
+        }
+        , font: {
+          family: "\"Open Sans\", verdana, arial, sans-serif"
+          , size: 12
+          , color: "rgb(169, 169, 169)"
+        }
+        , titlefont: {
+          family: "\"Open Sans\", verdana, arial, sans-serif"
+          , size: 17
+          , color: "rgb(76, 76, 76)"
+        }
+      }
+    }
+  }
 }
 
 const vegaExpected = {
@@ -390,6 +508,92 @@ const plotlyExpected = {
         , color: "rgb(76, 76, 76)"
       }
       , colorway: ['#0a0a0a', '#ff8a0e', '#dadada', '#f4eb41', '#d10808', '#5bd107', '#2274A5', '#E83F6F', '#6E9887', '#3A435E', '#861388', '#9F8082']
+    }
+  }
+  , plotlyWithNoData: {
+    data: [
+      {
+        x: [
+          '2014-01-01'
+          , '2014-01-02'
+          , '2014-01-05'
+        ]
+        , y: [
+          14.59
+          , 14.22
+          , 14
+        ]
+      }
+    ]
+    , layout: {
+      title: "Plotly Layout Title"
+      , height: 450
+      , xaxis: {
+        title: 'Date'
+        , tickformat: "%e %b %Y"
+        , type: 'date'
+        , tickmode: 'linear'
+        , ticksuffix: ''
+      }
+      , yaxis: {
+        title: 'High',
+        ticksuffix: ''
+      }
+      , font: {
+        family: "\"Open Sans\", verdana, arial, sans-serif"
+        , size: 12
+        , color: "rgb(169, 169, 169)"
+      }
+      , titlefont: {
+        family: "\"Open Sans\", verdana, arial, sans-serif"
+        , size: 17
+        , color: "rgb(76, 76, 76)"
+      }
+    }
+  }
+  , plotlyWithDataPropertyButNoData: {
+    data: [
+      {
+        x: [
+          '2014-01-01'
+          , '2014-01-02'
+          , '2014-01-05'
+        ]
+        , y: [
+          14.59
+          , 14.22
+          , 14
+        ]
+        , type: 'scatter'
+        , mode: 'lines'
+        , line: { width: 1.5, shape: 'spline', dash: 'solid' }
+        , name: 'High'
+      }
+    ]
+    , layout: {
+      title: "Plotly Layout Title"
+      , height: 450
+      , xaxis: {
+        title: 'Date'
+        , tickformat: "%e %b %Y"
+        , type: 'date'
+        , tickmode: 'linear'
+        , ticksuffix: ''
+      }
+      , yaxis: {
+        title: 'High',
+        ticksuffix: ''
+      }
+      , font: {
+        family: "\"Open Sans\", verdana, arial, sans-serif"
+        , size: 12
+        , color: "rgb(169, 169, 169)"
+      }
+      , titlefont: {
+        family: "\"Open Sans\", verdana, arial, sans-serif"
+        , size: 17
+        , color: "rgb(76, 76, 76)"
+      }
     }
   }
 }
@@ -754,6 +958,29 @@ describe('vegaToVega function', () => {
     let compiledView = utils.compileView(mockViews.vegaWithDataProperty2, mockDescriptor)
     const vegaSpec = utils.vegaToVega(compiledView)
     expect(vegaSpec).toEqual(vegaExpected.vegaWithDataProperty2)
+  })
+})
+
+describe('plotlyToPlotly function', () => {
+  it('should work with no data in plotly spec', () => {
+    let compiledView = utils.compileView(mockViews.plotlyWithNoData, mockDescriptor)
+    const plotlySpec = utils.plotlyToPlotly(compiledView)
+    expect(plotlySpec).toEqual(plotlyExpected.plotlyWithNoData)
+  })
+
+  it(`
+  should work with data property which contains no data
+   - it describes how the data is presented too
+  `, () => {
+    let compiledView = utils.compileView(mockViews.plotlyWithDataPropertyButNoData, mockDescriptor)
+    const plotlySpec = utils.plotlyToPlotly(compiledView)
+    expect(plotlySpec).toEqual(plotlyExpected.plotlyWithDataPropertyButNoData)
+  })
+
+  it('should work with data in the data property', () => {
+    let compiledView = utils.compileView(mockViews.plotlyWithData, mockDescriptor)
+    const plotlySpec = utils.plotlyToPlotly(compiledView)
+    expect(plotlySpec).toEqual(plotlyExpected.plotlyWithNoData)
   })
 })
 
