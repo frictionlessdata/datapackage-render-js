@@ -17,6 +17,7 @@ exports.findResourceByNameOrIndex = findResourceByNameOrIndex;
 exports.compileView = compileView;
 exports.allResourcesLoaded = allResourcesLoaded;
 exports.vegaToVega = vegaToVega;
+exports.plotlyToPlotly = plotlyToPlotly;
 exports.reactVirtualizedToReactVirtualized = reactVirtualizedToReactVirtualized;
 exports.normalizeDateAndTime = normalizeDateAndTime;
 
@@ -352,6 +353,57 @@ function vegaToVega(view) {
 
     return vegaSpec;
   }
+}
+
+/**
+ * Prepare Plotly spec
+ * @param {view} compiled view descriptor
+ * @return {Object} plotlySpec - full spec with data values
+ */
+function plotlyToPlotly(view) {
+  var plotlySpec = Object.assign({}, view.spec);
+
+  var rowsAsObjects = true;
+  var rows = getResourceCachedValues(view.resources[0], rowsAsObjects);
+  var groupValues = rows.map(function (row) {
+    return row[view.spec.group];
+  });
+
+  // In Plotly spec each data entry is called a trace
+  var groupAndSeriesDefinedTraces = [];
+  if (view.spec.group && view.spec.series) {
+    // generate the plotly data series from `group` and `series`
+    // { 'x': ..., 'y': ..., 'name': ...}
+    groupAndSeriesDefinedTraces = view.spec.series.map(function (seriesColumn) {
+      var trace = {
+        // TODO: change x and y for horizontal graphs
+        x: groupValues,
+        y: rows.map(function (row) {
+          return row[seriesColumn];
+        })
+        // TODO: think about names
+        // , name: seriesColumn
+      };
+      return trace;
+    });
+  }
+
+  if (!plotlySpec.data) {
+    plotlySpec.data = groupAndSeriesDefinedTraces;
+  } else {
+    // plotlySpec.data can contain layout information 
+    // according to Plotly specification
+    // even if x and y values are specified separately 
+    // (in `group` and `series`)
+    for (var i = 0; i < plotlySpec.data.length; i++) {
+      plotlySpec.data[i] = Object.assign(plotlySpec.data[i], groupAndSeriesDefinedTraces[i]);
+    }
+  }
+
+  delete plotlySpec.group;
+  delete plotlySpec.series;
+
+  return plotlySpec;
 }
 
 function reactVirtualizedToReactVirtualized(view) {
