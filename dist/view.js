@@ -355,6 +355,17 @@ function vegaToVega(view) {
   }
 }
 
+function isHorizontal(plotlyGraphSpec) {
+  if (plotlyGraphSpec.data) {
+    if (plotlyGraphSpec.data.length > 0) {
+      if (plotlyGraphSpec.data[0].orientation) {
+        return plotlyGraphSpec.data[0].orientation === 'h';
+      }
+    }
+  }
+  return false;
+}
+
 /**
  * Prepare Plotly spec
  * @param {view} compiled view descriptor
@@ -373,17 +384,20 @@ function plotlyToPlotly(view) {
   var groupAndSeriesDefinedTraces = [];
   if (view.spec.group && view.spec.series) {
     // generate the plotly data series from `group` and `series`
-    // { 'x': ..., 'y': ..., 'name': ...}
+    // { 'x': ..., 'y': ...}
     groupAndSeriesDefinedTraces = view.spec.series.map(function (seriesColumn) {
-      var trace = {
-        // TODO: change x and y for horizontal graphs
-        x: groupValues,
-        y: rows.map(function (row) {
+      var trace = {};
+      if (isHorizontal(view.spec)) {
+        trace['x'] = rows.map(function (row) {
           return row[seriesColumn];
-        })
-        // TODO: think about names
-        // , name: seriesColumn
-      };
+        });
+        trace['y'] = groupValues;
+      } else {
+        trace['x'] = groupValues;
+        trace['y'] = rows.map(function (row) {
+          return row[seriesColumn];
+        });
+      }
       return trace;
     });
   }

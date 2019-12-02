@@ -298,6 +298,46 @@ const mockViews = {
         }
       }
     }
+  },
+  plotlyHorizontal: {
+    name: 'plotly1'
+    , resources: [0]
+    , specType: 'plotly'
+    , spec: {
+      group: 'Date'
+      , series: ['High']
+      , data: [
+        {
+          type: 'bar'
+          , orientation: 'h'
+        }
+      ]
+      , layout: {
+        title: "Plotly Layout Title"
+        , height: 450
+        , yaxis: {
+          title: 'Date'
+          , tickformat: "%e %b %Y"
+          , type: 'date'
+          , tickmode: 'linear'
+          , ticksuffix: ''
+        }
+        , xaxis: {
+          title: 'High',
+          ticksuffix: ''
+        }
+        , font: {
+          family: "\"Open Sans\", verdana, arial, sans-serif"
+          , size: 12
+          , color: "rgb(169, 169, 169)"
+        }
+        , titlefont: {
+          family: "\"Open Sans\", verdana, arial, sans-serif"
+          , size: 17
+          , color: "rgb(76, 76, 76)"
+        }
+      }
+    }
   }
 }
 
@@ -585,6 +625,49 @@ const plotlyExpected = {
         , ticksuffix: ''
       }
       , yaxis: {
+        title: 'High',
+        ticksuffix: ''
+      }
+      , font: {
+        family: "\"Open Sans\", verdana, arial, sans-serif"
+        , size: 12
+        , color: "rgb(169, 169, 169)"
+      }
+      , titlefont: {
+        family: "\"Open Sans\", verdana, arial, sans-serif"
+        , size: 17
+        , color: "rgb(76, 76, 76)"
+      }
+    }
+  }
+  , plotlyHorizontal: {
+    data: [
+      {
+        y: [
+          '2014-01-01'
+          , '2014-01-02'
+          , '2014-01-05'
+        ]
+        , x: [
+          14.59
+          , 14.22
+          , 14
+        ]
+        , type: 'bar'
+        , orientation: 'h'
+      }
+    ]
+    , layout: {
+      title: "Plotly Layout Title"
+      , height: 450
+      , yaxis: {
+        title: 'Date'
+        , tickformat: "%e %b %Y"
+        , type: 'date'
+        , tickmode: 'linear'
+        , ticksuffix: ''
+      }
+      , xaxis: {
         title: 'High',
         ticksuffix: ''
       }
@@ -985,6 +1068,12 @@ describe('plotlyToPlotly function', () => {
     let compiledView = utils.compileView(mockViews.plotlyWithData, mockDescriptor)
     const plotlySpec = utils.plotlyToPlotly(compiledView)
     expect(plotlySpec).toEqual(plotlyExpected.plotlyWithNoData)
+  })
+
+  it('should map `group` to `y` and `series` to `x` in horizontal graphs', () => {
+    let compiledView = utils.compileView(mockViews.plotlyHorizontal, mockDescriptor)
+    const plotlySpec = utils.plotlyToPlotly(compiledView)
+    expect(plotlySpec).toEqual(plotlyExpected.plotlyHorizontal)
   })
 })
 
