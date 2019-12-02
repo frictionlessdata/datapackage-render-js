@@ -182,7 +182,9 @@ const mockViews = {
     , resources: [0]
     , specType: 'plotly'
     , spec: {
-      layout: {
+      group: 'Date'
+      , series: ['High']
+      , layout: {
         title: "Plotly Layout Title"
         , height: 450
         , xaxis: {
@@ -214,7 +216,9 @@ const mockViews = {
     , resources: [0]
     , specType: 'plotly'
     , spec: {
-      data: [
+      group: 'Date'
+      , series: ['High']
+      , data: [
         {
           type: 'scatter'
           , mode: 'lines'
@@ -254,22 +258,22 @@ const mockViews = {
     , resources: [0]
     , specType: 'plotly'
     , spec: {
-      layout: {
-        data: [
-          {
-            x: [
-              '2014-01-01'
-              , '2014-01-02'
-              , '2014-01-05'
-            ]
-            , y: [
-              14.59
-              , 14.22
-              , 14
-            ]
-          }
-        ]
-        , title: "Plotly Layout Title"
+      data: [
+        {
+          x: [
+            '2014-01-01'
+            , '2014-01-02'
+            , '2014-01-05'
+          ]
+          , y: [
+            14.59
+            , 14.22
+            , 14
+          ]
+        }
+      ]
+      , layout: {
+        title: "Plotly Layout Title"
         , height: 450
         , xaxis: {
           title: 'Date'
